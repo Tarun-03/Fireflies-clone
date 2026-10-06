@@ -17,7 +17,6 @@ import {
   Upload,
   Users,
   Video,
-  X,
 } from "lucide-react";
 import * as Dropdown from "@radix-ui/react-dropdown-menu";
 import { Avatar } from "./avatar";
@@ -25,7 +24,8 @@ import { Dialog, ErrorNotice } from "./dialog";
 import { useAction, useApi } from "./providers";
 import { CreateDialog } from "@/features/library/create-dialog";
 import { TagDialog } from "@/features/library/tag-dialog";
-import type { Activity, Meeting, Page, Profile, Tag } from "@/lib/types";
+import type { Activity, Page, Profile, Tag } from "@/lib/types";
+import { SearchDialog } from "@/features/search/search-dialog";
 import { dateLabel } from "@/lib/time";
 
 const navigation = [
@@ -214,62 +214,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <Notifications onClose={() => setNotifications(false)} />
       )}
     </div>
-  );
-}
-function SearchDialog({ onClose }: { onClose: () => void }) {
-  const [query, setQuery] = useState("");
-  const result = useApi<Page<Meeting>>(
-    `meetings?q=${encodeURIComponent(query)}&limit=10`,
-  );
-  return (
-    <Dialog
-      title="Search meetings"
-      description="Find a meeting by title."
-      open
-      onOpenChange={onClose}
-    >
-      <div className="search-field">
-        <Search size={18} />
-        <input
-          aria-label="Search all meetings"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search your workspace…"
-          autoFocus
-        />
-        {query && (
-          <button
-            className="icon-button"
-            onClick={() => setQuery("")}
-            aria-label="Clear search"
-          >
-            <X size={16} />
-          </button>
-        )}
-      </div>
-      <ErrorNotice error={result.error} />
-      <div className="search-results">
-        {result.isLoading ? (
-          <p>Searching…</p>
-        ) : result.data?.items.length === 0 ? (
-          <p>No meetings found. Try another title.</p>
-        ) : (
-          result.data?.items.map((meeting) => (
-            <Link
-              onClick={onClose}
-              key={meeting.id}
-              href={`/meetings/${meeting.id}`}
-            >
-              <CalendarDays size={18} />
-              <span>
-                {meeting.title}
-                <small>{dateLabel(meeting.occurred_at)}</small>
-              </span>
-            </Link>
-          ))
-        )}
-      </div>
-    </Dialog>
   );
 }
 function Notifications({ onClose }: { onClose: () => void }) {

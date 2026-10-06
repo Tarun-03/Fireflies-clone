@@ -14,6 +14,7 @@ import type {
   TimelineEntry,
 } from "@/lib/types";
 import type { PlayerState } from "./use-player";
+import { MeetingChat } from "./chat";
 import { colors } from "./annotation-create";
 import { SoundbiteEditor } from "./soundbite-editor";
 type Entry = Comment | Highlight;
@@ -73,6 +74,7 @@ export function NotebookTools({
             </button>
           );
         })}
+        <MeetingChat id={id} seek={player.seek} />
       </aside>
       <Dialog
         drawer

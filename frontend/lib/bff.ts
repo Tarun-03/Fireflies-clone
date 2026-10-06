@@ -116,6 +116,7 @@ const uuid =
   "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 const routes: [RegExp, readonly string[]][] = [
   [/^(?:me|intelligence)$/, ["GET"]],
+  [new RegExp(`^meetings/${uuid}/export/manifest$`), ["GET"]],
   [new RegExp(`^meetings/${uuid}/soundbites/${uuid}/export$`), ["GET"]],
   [new RegExp(`^meetings/${uuid}/segments/${uuid}/impact$`), ["GET"]],
   [/^me\/preferences$/, ["GET", "PATCH"]],

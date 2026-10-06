@@ -76,10 +76,10 @@ export function TranscriptPanel({
     Boolean(query),
   );
   const scroll = useRef<HTMLDivElement>(null);
-  const initialized = useRef(false);
+  const initialized = useRef<string | null>(null);
   useEffect(() => {
-    if (!initialized.current && timeline.length) {
-      initialized.current = true;
+    if (initialSegment !== initialized.current && timeline.length) {
+      initialized.current = initialSegment;
       const segment = timeline.find((s) => s.public_id === initialSegment);
       if (segment) player.seek(segment.start_ms);
     }

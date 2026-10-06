@@ -10,6 +10,7 @@ import { dateLabel, timeLabel } from "@/lib/time";
 import type { Meeting, Profile, TimelineEntry } from "@/lib/types";
 import { MeetingMenu } from "@/features/library/meeting-menu";
 import { NotebookTools } from "./annotations-panel";
+import { ExportDialog } from "./export-dialog";
 import { Player } from "./player";
 import { usePlayer } from "./use-player";
 import { TranscriptPanel } from "./transcript";
@@ -90,6 +91,7 @@ function NotebookContent({
             {tag.name}
           </span>
         ))}
+        <ExportDialog id={meeting.id} />
         <button
           className="expand-notebook icon-button"
           aria-label={expanded ? "Show split view" : "Focus transcript"}

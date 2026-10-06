@@ -24,3 +24,7 @@ export type IntelligenceStatus = components["schemas"]["IntelligenceStatus"];
 export type Comment = components["schemas"]["Comment"];
 export type Highlight = components["schemas"]["Highlight"];
 export type Soundbite = components["schemas"]["Soundbite"];
+export type SearchHit = components["schemas"]["SearchHit"];
+export type ChatHistory = components["schemas"]["ChatHistory"];
+export type ChatResult = components["schemas"]["ChatResult"];
+export type ExportManifest = components["schemas"]["ExportManifest"];

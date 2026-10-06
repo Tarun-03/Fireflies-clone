@@ -683,6 +683,76 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search */
+        get: operations["search_api_v1_search_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** History */
+        get: operations["history_api_v1_meetings__meeting_id__chat_get"];
+        put?: never;
+        /** Ask */
+        post: operations["ask_api_v1_meetings__meeting_id__chat_post"];
+        /** Clear */
+        delete: operations["clear_api_v1_meetings__meeting_id__chat_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/export/manifest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Manifest */
+        get: operations["manifest_api_v1_meetings__meeting_id__export_manifest_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Export */
+        get: operations["export_api_v1_meetings__meeting_id__export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -742,6 +812,78 @@ export interface components {
             /** Source Revision */
             source_revision: number;
         };
+        /** ChatHistory */
+        ChatHistory: {
+            /** Items */
+            items: components["schemas"]["ChatMessage"][];
+            /** Has More */
+            has_more: boolean;
+            /** Next Cursor */
+            next_cursor: number | null;
+            /** Version */
+            version: number;
+            /** Transcript Revision */
+            transcript_revision: number;
+        };
+        /** ChatMessage */
+        ChatMessage: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Role */
+            role: string;
+            /** Content */
+            content: string;
+            /** Provider */
+            provider: string | null;
+            /** Model */
+            model: string | null;
+            /** Source Revision */
+            source_revision: number;
+            /** Created At */
+            created_at: string;
+            /** Citations */
+            citations?: components["schemas"]["Citation"][];
+        };
+        /** ChatRequest */
+        ChatRequest: {
+            /** Question */
+            question: string;
+            /**
+             * Mode
+             * @default extractive
+             * @enum {string}
+             */
+            mode: "extractive" | "openai";
+            /**
+             * Consent
+             * @default false
+             */
+            consent: boolean;
+        };
+        /** ChatResult */
+        ChatResult: {
+            user: components["schemas"]["ChatMessage"];
+            assistant: components["schemas"]["ChatMessage"];
+            /** Notice */
+            notice: string | null;
+        };
+        /** Citation */
+        Citation: {
+            /** Segment Id */
+            segment_id: string | null;
+            /**
+             * Original Segment Public Id
+             * Format: uuid
+             */
+            original_segment_public_id: string;
+            /** Timestamp Ms */
+            timestamp_ms: number;
+            /** Source Revision */
+            source_revision: number;
+        };
         /** Comment */
         Comment: {
             /**
@@ -782,6 +924,15 @@ export interface components {
         CommentUpdate: {
             /** Body */
             body: string;
+        };
+        /** ExportManifest */
+        ExportManifest: {
+            /** Parts */
+            parts: number;
+            /** Maximum Characters Per Part */
+            maximum_characters_per_part: number;
+            /** Note */
+            note: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1120,6 +1271,25 @@ export interface components {
                 [key: string]: string | number | null;
             };
         };
+        /** Page[SearchHit] */
+        Page_SearchHit_: {
+            /** Items */
+            items: components["schemas"]["SearchHit"][];
+            /** Next Cursor */
+            next_cursor?: string | null;
+            /**
+             * Has More
+             * @default false
+             */
+            has_more: boolean;
+            /**
+             * Applied Filters
+             * @default {}
+             */
+            applied_filters: {
+                [key: string]: string | number | null;
+            };
+        };
         /** Page[Soundbite] */
         Page_Soundbite_: {
             /** Items */
@@ -1258,6 +1428,38 @@ export interface components {
              * @default false
              */
             consent: boolean;
+        };
+        /** SearchHit */
+        SearchHit: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Meeting Id
+             * Format: uuid
+             */
+            meeting_id: string;
+            /** Segment Id */
+            segment_id: string | null;
+            /** Title */
+            title: string;
+            /** Occurred At */
+            occurred_at: string;
+            /** Timestamp Ms */
+            timestamp_ms: number | null;
+            /** Speaker Name */
+            speaker_name: string | null;
+            /** Kind */
+            kind: string;
+            /** Snippet */
+            snippet: string;
+            /** Ranges */
+            ranges: [
+                number,
+                number
+            ][];
         };
         /** Segment */
         Segment: {
@@ -3540,6 +3742,231 @@ export interface operations {
             path: {
                 meeting_id: string;
                 item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    search_api_v1_search_get: {
+        parameters: {
+            query: {
+                q: string;
+                cursor?: number;
+                tag?: string | null;
+                participant?: string | null;
+                kind?: ("title" | "transcript") | null;
+            };
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_SearchHit_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    history_api_v1_meetings__meeting_id__chat_get: {
+        parameters: {
+            query?: {
+                cursor?: number;
+            };
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatHistory"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_api_v1_meetings__meeting_id__chat_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "idempotency-key": string;
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    clear_api_v1_meetings__meeting_id__chat_delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    manifest_api_v1_meetings__meeting_id__export_manifest_get: {
+        parameters: {
+            query?: {
+                section?: "all" | "transcript" | "summary" | "tasks";
+                timestamps?: boolean;
+                speaker_names?: boolean;
+            };
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportManifest"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_api_v1_meetings__meeting_id__export_get: {
+        parameters: {
+            query?: {
+                format?: "txt" | "md" | "pdf";
+                section?: "all" | "transcript" | "summary" | "tasks";
+                timestamps?: boolean;
+                speaker_names?: boolean;
+                part?: number;
+            };
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
             };
             cookie?: never;
         };

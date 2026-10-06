@@ -7,7 +7,19 @@ from starlette.middleware.base import RequestResponseEndpoint
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.responses import JSONResponse, Response
 
-from app.api import annotations, imports, meetings, segments, summary, tasks, transcript, workspace
+from app.api import (
+    annotations,
+    chat,
+    exports,
+    imports,
+    meetings,
+    search,
+    segments,
+    summary,
+    tasks,
+    transcript,
+    workspace,
+)
 from app.api.errors import install_errors
 from app.core.body_limit import BodyLimitMiddleware
 from app.core.config import get_settings
@@ -64,3 +76,9 @@ app.include_router(summary.router)
 app.include_router(segments.router)
 
 app.include_router(annotations.router)
+
+app.include_router(search.router)
+
+app.include_router(chat.router)
+
+app.include_router(exports.router)

@@ -1621,3 +1621,70 @@ input.player-range {
     border-radius: 12px 12px 0 0;
   }
 }
+.global-search-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.global-search-filters select {
+  font-size: 12px;
+  max-width: 190px;
+  flex: 1;
+  min-width: 120px;
+}
+.search-snippet {
+  display: block;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 7px;
+}
+.global-search-hit {
+  padding: 14px 8px !important;
+}
+.export-parts {
+  display: grid;
+  gap: 8px;
+  max-height: 260px;
+  overflow: auto;
+}
+.chat-history {
+  max-height: 50vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.chat-message {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 12px;
+}
+.chat-message.user {
+  background: var(--accent-soft);
+  margin-left: 24px;
+}
+.chat-message strong {
+  font-size: 11px;
+}
+.chat-message p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.8;
+}
+.chat-citations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chat-citations button {
+  font-size: 10px;
+  color: var(--accent);
+  padding: 4px 8px;
+}
+.chat-suggestions {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+}
