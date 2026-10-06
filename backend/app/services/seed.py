@@ -78,6 +78,7 @@ class SeedMeeting(FixtureModel):
     tasks: list[SeedTask]
     points: list[SeedPoint]
     overview: str
+    sample_media_key: str | None = None
 
 
 class SeedTemplate(FixtureModel):
@@ -126,6 +127,8 @@ def bootstrap(db: Session, session_id: str) -> tuple[str, str]:
                 occurred_at=fixture.occurred_at,
                 duration_ms=fixture.duration_ms,
                 source="seeded",
+                media_mode="sample" if fixture.sample_media_key else "simulated",
+                sample_media_key=fixture.sample_media_key,
                 description="Synthetic demonstration meeting",
             )
         )

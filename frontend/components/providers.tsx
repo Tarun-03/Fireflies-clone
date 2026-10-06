@@ -63,12 +63,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
     </QueryClientProvider>
   );
 }
-export function useApi<T>(path: string) {
+export function useApi<T>(path: string, enabled = true) {
   const ready = useContext(Ready);
   return useQuery({
     queryKey: ["api", path],
     queryFn: ({ signal }) => api<T>(path, { signal }),
-    enabled: ready,
+    enabled: ready && enabled,
   });
 }
 export function useAction() {

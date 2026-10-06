@@ -16,3 +16,5 @@ Public response models omit internal workspace and secret fields. OpenAPI is gen
 SQLite migrations define normalized records, composite scope keys, and FTS projection triggers. Import creation, seed cloning, and task reassignment are atomic. The anonymous session has a thirty-day lifetime; cookie loss creates a new isolated workspace without deleting the old one.
 
 The deployment boundary is one backend instance with a persistent disk. Backups use SQLite's consistent online backup API. This design does not support unrestricted horizontal write scaling.
+
+The meeting notebook requests transcript pages of at most 60 turns and a separate compact timeline of at most 3,000 entries. The player uses binary search by `(start_ms, ordinal)` to locate the current turn; follow mode selects a nearby page instead of mounting the complete text. Wheel, touch, and transcript navigation keys suspend follow. Mobile views hide panels without unmounting the player or search state. Simulated playback uses a monotonic clock; bundled sample audio uses the media element's `currentTime`. Neither mode claims to be a meeting recording.

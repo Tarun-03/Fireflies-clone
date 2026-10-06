@@ -7,7 +7,7 @@ from starlette.middleware.base import RequestResponseEndpoint
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.responses import JSONResponse, Response
 
-from app.api import meetings, tasks, workspace
+from app.api import meetings, summary, tasks, transcript, workspace
 from app.api.errors import install_errors
 from app.core.body_limit import BodyLimitMiddleware
 from app.core.config import get_settings
@@ -55,3 +55,7 @@ async def request_headers(request: Request, call_next: RequestResponseEndpoint) 
     result.headers["Cache-Control"] = "no-store"
     result.headers["X-Content-Type-Options"] = "nosniff"
     return result
+
+
+app.include_router(transcript.router)
+app.include_router(summary.router)

@@ -387,7 +387,8 @@
           "segment_ordinal": 32
         }
       ],
-      "overview": "Update the search projection within the transcript transaction. Return a bounded transcript window and keep a separate compact timeline. Check workspace and meeting together before reading each annotation."
+      "overview": "Update the search projection within the transcript transaction. Return a bounded transcript window and keep a separate compact timeline. Check workspace and meeting together before reading each annotation.",
+      "sample_media_key": "welcome"
     },
     {
       "title": "Sprint planning · A calmer notebook",

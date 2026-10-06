@@ -9,3 +9,10 @@ export type Activity = components["schemas"]["Activity"];
 export type Page<T> = Omit<components["schemas"]["Page_Meeting_"], "items"> & {
   items: T[];
 };
+export type Segment = components["schemas"]["Segment"];
+export type Transcript = components["schemas"]["Transcript"];
+export type TimelineEntry = components["schemas"]["TimelineEntry"];
+export type TranscriptSearch = components["schemas"]["TranscriptSearch"];
+export type Summary = components["schemas"]["Summary"];
+export type Chapter = components["schemas"]["Chapter"];
+export type Speaker = components["schemas"]["Speaker"];
