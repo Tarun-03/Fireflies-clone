@@ -9,6 +9,7 @@ import { Avatar } from "@/components/avatar";
 import { dateLabel, timeLabel } from "@/lib/time";
 import type { Meeting, Profile, TimelineEntry } from "@/lib/types";
 import { MeetingMenu } from "@/features/library/meeting-menu";
+import { NotebookTools } from "./annotations-panel";
 import { Player } from "./player";
 import { usePlayer } from "./use-player";
 import { TranscriptPanel } from "./transcript";
@@ -110,17 +111,25 @@ function NotebookContent({
         ))}
       </div>
       <ErrorNotice error={timeline.error} />
-      <div className={`notebook-panels mobile-${tab}`}>
-        <NotesPanel
+      <div className="notebook-body">
+        <div className={`notebook-panels mobile-${tab}`}>
+          <NotesPanel
+            id={meeting.id}
+            timeline={timeline.data ?? []}
+            seek={player.seek}
+          />
+          <TranscriptPanel
+            id={meeting.id}
+            timeline={timeline.data ?? []}
+            player={player}
+            initialSegment={params.get("segment")}
+          />
+        </div>
+        <NotebookTools
           id={meeting.id}
-          timeline={timeline.data ?? []}
-          seek={player.seek}
-        />
-        <TranscriptPanel
-          id={meeting.id}
+          duration={meeting.duration_ms}
           timeline={timeline.data ?? []}
           player={player}
-          initialSegment={params.get("segment")}
         />
       </div>
       <Player player={player} meeting={meeting} />

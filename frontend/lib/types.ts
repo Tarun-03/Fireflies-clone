@@ -21,3 +21,6 @@ export type SegmentInput = components["schemas"]["SegmentInput"];
 export type SegmentImpact = components["schemas"]["SegmentImpact"];
 
 export type IntelligenceStatus = components["schemas"]["IntelligenceStatus"];
+export type Comment = components["schemas"]["Comment"];
+export type Highlight = components["schemas"]["Highlight"];
+export type Soundbite = components["schemas"]["Soundbite"];

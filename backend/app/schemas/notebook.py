@@ -5,6 +5,13 @@ from pydantic import Field
 from app.schemas.common import PublicModel, StrictModel
 
 
+class InlineHighlight(PublicModel):
+    id: UUID
+    start_offset: int
+    end_offset: int
+    color: str
+
+
 class Segment(PublicModel):
     public_id: UUID
     speaker_id: UUID
@@ -15,6 +22,7 @@ class Segment(PublicModel):
     version: int
     speaker_name: str
     stable_color_key: int
+    highlights: list[InlineHighlight] = Field(default_factory=list)
 
 
 class Transcript(PublicModel):

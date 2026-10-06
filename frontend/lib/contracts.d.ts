@@ -558,6 +558,131 @@ export interface paths {
         patch: operations["edit_api_v1_meetings__meeting_id__segments__segment_id__patch"];
         trace?: never;
     };
+    "/api/v1/meetings/{meeting_id}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Comments */
+        get: operations["list_comments_api_v1_meetings__meeting_id__comments_get"];
+        put?: never;
+        /** Add Comment */
+        post: operations["add_comment_api_v1_meetings__meeting_id__comments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/comments/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Comment */
+        delete: operations["delete_comment_api_v1_meetings__meeting_id__comments__item_id__delete"];
+        options?: never;
+        head?: never;
+        /** Edit Comment */
+        patch: operations["edit_comment_api_v1_meetings__meeting_id__comments__item_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/highlights": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Highlights */
+        get: operations["list_highlights_api_v1_meetings__meeting_id__highlights_get"];
+        put?: never;
+        /** Add Highlight */
+        post: operations["add_highlight_api_v1_meetings__meeting_id__highlights_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/highlights/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Highlight */
+        delete: operations["delete_highlight_api_v1_meetings__meeting_id__highlights__item_id__delete"];
+        options?: never;
+        head?: never;
+        /** Edit Highlight */
+        patch: operations["edit_highlight_api_v1_meetings__meeting_id__highlights__item_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/soundbites": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Soundbites */
+        get: operations["list_soundbites_api_v1_meetings__meeting_id__soundbites_get"];
+        put?: never;
+        /** Add Soundbite */
+        post: operations["add_soundbite_api_v1_meetings__meeting_id__soundbites_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/soundbites/{item_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Delete Soundbite */
+        delete: operations["delete_soundbite_api_v1_meetings__meeting_id__soundbites__item_id__delete"];
+        options?: never;
+        head?: never;
+        /** Edit Soundbite */
+        patch: operations["edit_soundbite_api_v1_meetings__meeting_id__soundbites__item_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/soundbites/{item_id}/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Excerpt */
+        get: operations["excerpt_api_v1_meetings__meeting_id__soundbites__item_id__export_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -617,10 +742,123 @@ export interface components {
             /** Source Revision */
             source_revision: number;
         };
+        /** Comment */
+        Comment: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Meeting Id
+             * Format: uuid
+             */
+            meeting_id: string;
+            /**
+             * Segment Id
+             * Format: uuid
+             */
+            segment_id: string;
+            /** Body */
+            body: string;
+            /** Version */
+            version: number;
+            /** Created At */
+            created_at: string;
+        };
+        /** CommentCreate */
+        CommentCreate: {
+            /**
+             * Segment Id
+             * Format: uuid
+             */
+            segment_id: string;
+            /** Segment Version */
+            segment_version: number;
+            /** Body */
+            body: string;
+        };
+        /** CommentUpdate */
+        CommentUpdate: {
+            /** Body */
+            body: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** Highlight */
+        Highlight: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Meeting Id
+             * Format: uuid
+             */
+            meeting_id: string;
+            /**
+             * Segment Id
+             * Format: uuid
+             */
+            segment_id: string;
+            /** Start Offset */
+            start_offset: number;
+            /** End Offset */
+            end_offset: number;
+            /** Selected Text */
+            selected_text: string;
+            /** Note */
+            note: string;
+            /**
+             * Color
+             * @enum {string}
+             */
+            color: "purple" | "blue" | "green" | "amber" | "rose";
+            /** Version */
+            version: number;
+            /** Created At */
+            created_at: string;
+        };
+        /** HighlightCreate */
+        HighlightCreate: {
+            /**
+             * Segment Id
+             * Format: uuid
+             */
+            segment_id: string;
+            /** Segment Version */
+            segment_version: number;
+            /** Start Offset */
+            start_offset: number;
+            /** End Offset */
+            end_offset: number;
+            /** Selected Text */
+            selected_text: string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+            /**
+             * Color
+             * @default amber
+             * @enum {string}
+             */
+            color: "purple" | "blue" | "green" | "amber" | "rose";
+        };
+        /** HighlightUpdate */
+        HighlightUpdate: {
+            /** Note */
+            note: string;
+            /**
+             * Color
+             * @enum {string}
+             */
+            color: "purple" | "blue" | "green" | "amber" | "rose";
         };
         /** ImportPreview */
         ImportPreview: {
@@ -667,6 +905,20 @@ export interface components {
              * @default false
              */
             acknowledge_estimated: boolean;
+        };
+        /** InlineHighlight */
+        InlineHighlight: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Start Offset */
+            start_offset: number;
+            /** End Offset */
+            end_offset: number;
+            /** Color */
+            color: string;
         };
         /** IntelligenceStatus */
         IntelligenceStatus: {
@@ -792,6 +1044,44 @@ export interface components {
                 [key: string]: string | number | null;
             };
         };
+        /** Page[Comment] */
+        Page_Comment_: {
+            /** Items */
+            items: components["schemas"]["Comment"][];
+            /** Next Cursor */
+            next_cursor?: string | null;
+            /**
+             * Has More
+             * @default false
+             */
+            has_more: boolean;
+            /**
+             * Applied Filters
+             * @default {}
+             */
+            applied_filters: {
+                [key: string]: string | number | null;
+            };
+        };
+        /** Page[Highlight] */
+        Page_Highlight_: {
+            /** Items */
+            items: components["schemas"]["Highlight"][];
+            /** Next Cursor */
+            next_cursor?: string | null;
+            /**
+             * Has More
+             * @default false
+             */
+            has_more: boolean;
+            /**
+             * Applied Filters
+             * @default {}
+             */
+            applied_filters: {
+                [key: string]: string | number | null;
+            };
+        };
         /** Page[Meeting] */
         Page_Meeting_: {
             /** Items */
@@ -815,6 +1105,25 @@ export interface components {
         Page_Participant_: {
             /** Items */
             items: components["schemas"]["Participant"][];
+            /** Next Cursor */
+            next_cursor?: string | null;
+            /**
+             * Has More
+             * @default false
+             */
+            has_more: boolean;
+            /**
+             * Applied Filters
+             * @default {}
+             */
+            applied_filters: {
+                [key: string]: string | number | null;
+            };
+        };
+        /** Page[Soundbite] */
+        Page_Soundbite_: {
+            /** Items */
+            items: components["schemas"]["Soundbite"][];
             /** Next Cursor */
             next_cursor?: string | null;
             /**
@@ -976,6 +1285,8 @@ export interface components {
             speaker_name: string;
             /** Stable Color Key */
             stable_color_key: number;
+            /** Highlights */
+            highlights?: components["schemas"]["InlineHighlight"][];
         };
         /** SegmentImpact */
         SegmentImpact: {
@@ -1018,6 +1329,38 @@ export interface components {
              * @default true
              */
             ready: boolean;
+        };
+        /** Soundbite */
+        Soundbite: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Meeting Id
+             * Format: uuid
+             */
+            meeting_id: string;
+            /** Title */
+            title: string;
+            /** Start Ms */
+            start_ms: number;
+            /** End Ms */
+            end_ms: number;
+            /** Version */
+            version: number;
+            /** Created At */
+            created_at: string;
+        };
+        /** SoundbiteInput */
+        SoundbiteInput: {
+            /** Title */
+            title: string;
+            /** Start Ms */
+            start_ms: number;
+            /** End Ms */
+            end_ms: number;
         };
         /** Speaker */
         Speaker: {
@@ -2728,6 +3071,487 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Segment"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_comments_api_v1_meetings__meeting_id__comments_get: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+            };
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_Comment_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_comment_api_v1_meetings__meeting_id__comments_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Comment"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_comment_api_v1_meetings__meeting_id__comments__item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    edit_comment_api_v1_meetings__meeting_id__comments__item_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Comment"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_highlights_api_v1_meetings__meeting_id__highlights_get: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+            };
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_Highlight_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_highlight_api_v1_meetings__meeting_id__highlights_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HighlightCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Highlight"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_highlight_api_v1_meetings__meeting_id__highlights__item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    edit_highlight_api_v1_meetings__meeting_id__highlights__item_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["HighlightUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Highlight"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_soundbites_api_v1_meetings__meeting_id__soundbites_get: {
+        parameters: {
+            query?: {
+                cursor?: string | null;
+            };
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_Soundbite_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_soundbite_api_v1_meetings__meeting_id__soundbites_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SoundbiteInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Soundbite"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_soundbite_api_v1_meetings__meeting_id__soundbites__item_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    edit_soundbite_api_v1_meetings__meeting_id__soundbites__item_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SoundbiteInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Soundbite"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    excerpt_api_v1_meetings__meeting_id__soundbites__item_id__export_get: {
+        parameters: {
+            query?: {
+                format?: string;
+            };
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

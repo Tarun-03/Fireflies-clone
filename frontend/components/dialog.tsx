@@ -8,6 +8,7 @@ export function Dialog({
   onOpenChange,
   children,
   wide = false,
+  drawer = false,
 }: {
   title: string;
   description?: string;
@@ -15,12 +16,15 @@ export function Dialog({
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
   wide?: boolean;
+  drawer?: boolean;
 }) {
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Portal>
         <RadixDialog.Overlay className="dialog-overlay" />
-        <RadixDialog.Content className={`dialog ${wide ? "wide" : ""}`}>
+        <RadixDialog.Content
+          className={`dialog ${wide ? "wide" : ""} ${drawer ? "drawer" : ""}`}
+        >
           <div className="dialog-heading">
             <RadixDialog.Title>{title}</RadixDialog.Title>
             <RadixDialog.Close

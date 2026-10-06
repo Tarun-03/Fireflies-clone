@@ -1534,3 +1534,90 @@ input.player-range {
   color: var(--text);
   font-size: 12px;
 }
+.notebook-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+}
+.notebook-tools {
+  border: 1px solid var(--border);
+  border-left: 0;
+  background: var(--surface);
+  border-radius: 0 12px 0 0;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 4px;
+}
+.notebook-tools .icon-button {
+  width: 34px;
+  min-width: 34px;
+}
+.notebook-body .notebook-panels {
+  border-radius: 12px 0 0 0;
+}
+.dialog.drawer {
+  left: auto;
+  right: 0;
+  top: 0;
+  transform: none;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: 440px;
+  max-width: 100%;
+  border-radius: 12px 0 0 12px;
+}
+.annotation-item {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.annotation-item h3 {
+  font-size: 14px;
+}
+.annotation-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.annotation-actions button {
+  font-size: 11px;
+  padding: 6px 10px;
+}
+.highlight-quote {
+  margin: 8px 0;
+  padding: 10px 12px;
+  border-left: 3px solid var(--accent);
+  border-radius: 4px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  max-height: 240px;
+  overflow: auto;
+}
+.soundbite-state {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.soundbite-state button {
+  font-size: 11px;
+  padding: 4px 8px;
+  margin-left: 8px;
+}
+@media (max-width: 800px) {
+  .notebook-body {
+    grid-template-columns: 1fr;
+  }
+  .notebook-tools {
+    order: -1;
+    flex-direction: row;
+    border: 0;
+    background: transparent;
+    padding: 0 0 8px;
+    justify-content: flex-end;
+  }
+  .notebook-body .notebook-panels {
+    border-radius: 12px 12px 0 0;
+  }
+}

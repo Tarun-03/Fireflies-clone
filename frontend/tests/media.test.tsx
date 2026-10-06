@@ -41,3 +41,16 @@ it("uses controlled media time, preserves pause while seeking, and applies speed
   act(() => result.current.seek(20000));
   expect(media.currentTime).toBe(10);
 });
+it("stops simulated soundbites exactly at their saved end", async () => {
+  vi.useFakeTimers();
+  const { result } = renderHook(() => usePlayer(10000, false, 1));
+  await act(async () => {
+    await result.current.playRange(1000, 2000);
+  });
+  act(() => vi.advanceTimersByTime(1300));
+  expect(result.current.time).toBe(2000);
+  expect(result.current.playing).toBe(false);
+  act(() => result.current.seek(5000));
+  expect(result.current.range).toBeNull();
+  expect(result.current.time).toBe(5000);
+});

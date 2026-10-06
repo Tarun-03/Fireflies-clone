@@ -5,7 +5,7 @@ from sqlalchemy import select
 
 from app.api.dependencies import Scoped
 from app.core.errors import DomainError
-from app.models import meetings, segments, speakers
+from app.models import highlights, meetings, segments, speakers
 from app.repositories.scoped import get_resource
 from app.schemas.notebook import Segment, TimelineEntry, Transcript, TranscriptHit, TranscriptSearch
 
@@ -30,10 +30,27 @@ def transcript_page(
         .mappings()
         .all()
     )
+    marks: dict[str, list[dict[str, object]]] = {}
+    for mark in scope.db.execute(
+        select(
+            highlights.c.id,
+            highlights.c.segment_id,
+            highlights.c.start_offset,
+            highlights.c.end_offset,
+            highlights.c.color,
+        )
+        .where(
+            highlights.c.workspace_id == scope.workspace_id,
+            highlights.c.meeting_id == meeting_id,
+            highlights.c.segment_id.in_([row["public_id"] for row in rows[:limit]]),
+        )
+        .order_by(highlights.c.created_at, highlights.c.id)
+    ).mappings():
+        marks.setdefault(mark["segment_id"], []).append(dict(mark))
     items: list[Segment] = []
     size = 0
     for row in rows[:limit]:
-        item = Segment.model_validate(row)
+        item = Segment.model_validate(dict(row) | {"highlights": marks.get(row["public_id"], [])})
         item_size = len(item.model_dump_json().encode())
         if size + item_size > 512 * 1024 and items:
             break

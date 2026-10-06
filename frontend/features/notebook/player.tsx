@@ -105,6 +105,13 @@ export function Player({
         aria-valuetext={`${timestamp(p.time)} of ${timestamp(meeting.duration_ms)}`}
         onChange={(e) => p.seek(Number(e.target.value))}
       />
+      {p.range && (
+        <span className="soundbite-state">
+          Soundbite {timestamp(p.range.start)}–{timestamp(p.range.end)}{" "}
+          {p.time >= p.range.end ? "· Complete" : ""}{" "}
+          <button onClick={p.clearRange}>Exit interval</button>
+        </span>
+      )}
       {p.time >= meeting.duration_ms && (
         <span className="muted">Playback complete</span>
       )}

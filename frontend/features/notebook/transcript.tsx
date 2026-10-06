@@ -12,6 +12,8 @@ import type {
   Transcript as TranscriptData,
   TranscriptSearch,
 } from "@/lib/types";
+import { AnnotationCreate } from "./annotation-create";
+import { selectedRange, highlightChunks } from "./selection";
 import { SegmentEditor } from "./segment-editor";
 import { locate } from "./playback";
 import type { PlayerState } from "./use-player";
@@ -48,8 +50,14 @@ export function TranscriptPanel({
 }) {
   const [editing, setEditing] = useState<Segment | null>(null);
   const [query, setQuery] = useState("");
-  const [speaker, setSpeaker] = useState("");
-  const [follow, setFollow] = useState(true);
+  const [speakerFilter, setSpeaker] = useState("");
+  const speaker = player.follow ? "" : speakerFilter;
+  const { follow, setFollow } = player;
+  const [annotation, setAnnotation] = useState<{
+    segment: Segment;
+    start: number;
+    end: number;
+  } | null>(null);
   const [manualOffset, setManualOffset] = useState(0);
   const [hitCursor, setHitCursor] = useState(0);
   const active = locate(timeline, player.time);
@@ -245,7 +253,35 @@ export function TranscriptPanel({
                   </span>
                 )}
               </div>
-              <p>{segment.text}</p>
+              <p
+                onMouseUp={(e) => {
+                  const range = selectedRange(e.currentTarget);
+                  if (range) setAnnotation({ segment, ...range });
+                }}
+              >
+                {highlightChunks(segment.text, segment.highlights ?? []).map(
+                  (chunk, index) =>
+                    chunk.color ? (
+                      <mark className={`tag-${chunk.color}`} key={index}>
+                        {chunk.text}
+                      </mark>
+                    ) : (
+                      chunk.text
+                    ),
+                )}
+              </p>
+              <button
+                className="source-link"
+                onClick={() =>
+                  setAnnotation({
+                    segment,
+                    start: 0,
+                    end: Array.from(segment.text).length,
+                  })
+                }
+              >
+                Annotate turn
+              </button>
               <button
                 className="source-link"
                 onClick={() => setEditing(segment)}
@@ -281,6 +317,14 @@ export function TranscriptPanel({
           </button>
         </div>
       </div>
+      {annotation && (
+        <AnnotationCreate
+          id={id}
+          segment={annotation.segment}
+          selection={annotation}
+          close={() => setAnnotation(null)}
+        />
+      )}
       {editing && (
         <SegmentEditor
           id={id}
