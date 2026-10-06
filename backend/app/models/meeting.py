@@ -1,0 +1,130 @@
+from sqlalchemy import (
+    CheckConstraint,
+    Column,
+    ForeignKey,
+    ForeignKeyConstraint,
+    Index,
+    Integer,
+    String,
+    Table,
+    Text,
+    UniqueConstraint,
+)
+
+from app.models.common import identity, meeting_fk, metadata, timestamps, uid, version
+
+meetings = Table(
+    "meetings",
+    metadata,
+    identity(),
+    Column("workspace_id", ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False),
+    Column("created_by_id", String(36), nullable=False),
+    Column("title", String(200), nullable=False),
+    Column("occurred_at", String, nullable=False),
+    Column("duration_ms", Integer, nullable=False),
+    Column("description", Text),
+    Column("source", String, nullable=False),
+    Column("media_mode", String, nullable=False, default="simulated"),
+    Column("sample_media_key", String),
+    Column("estimated_timing", Integer, nullable=False, default=0),
+    Column("transcript_revision", Integer, nullable=False, default=1),
+    version(),
+    *timestamps(),
+    UniqueConstraint("workspace_id", "id"),
+    CheckConstraint("length(title) BETWEEN 1 AND 200", name="title"),
+    CheckConstraint("duration_ms BETWEEN 1000 AND 21600000", name="duration"),
+    CheckConstraint("source IN ('seeded','pasted','uploaded','manual')", name="source"),
+    CheckConstraint("media_mode IN ('simulated','sample')", name="media"),
+    CheckConstraint("sample_media_key IS NULL OR sample_media_key = 'welcome'", name="sample_key"),
+    CheckConstraint("transcript_revision >= 1 AND version >= 1", name="revision"),
+    ForeignKeyConstraint(
+        ["workspace_id", "created_by_id"],
+        ["workspace_memberships.workspace_id", "workspace_memberships.user_id"],
+    ),
+    Index("ix_meetings_recent", "workspace_id", "occurred_at", "id"),
+)
+attendees = Table(
+    "meeting_participants",
+    metadata,
+    Column("workspace_id", String(36), nullable=False),
+    Column("meeting_id", String(36), primary_key=True),
+    Column("participant_id", String(36), primary_key=True),
+    Column("role", String, nullable=False, default="attendee"),
+    Column("joined_at", String),
+    UniqueConstraint("workspace_id", "meeting_id", "participant_id"),
+    meeting_fk(),
+    ForeignKeyConstraint(
+        ["workspace_id", "participant_id"], ["participants.workspace_id", "participants.id"]
+    ),
+    CheckConstraint("role IN ('host','attendee')", name="role"),
+    Index("ix_attendees_participant", "workspace_id", "participant_id", "meeting_id"),
+)
+speakers = Table(
+    "meeting_speakers",
+    metadata,
+    identity(),
+    Column("workspace_id", String(36), nullable=False),
+    Column("meeting_id", String(36), nullable=False),
+    Column("participant_id", String(36)),
+    Column("display_name", String(120), nullable=False),
+    Column("stable_color_key", Integer, nullable=False),
+    Column("position", Integer, nullable=False),
+    version(),
+    UniqueConstraint("workspace_id", "meeting_id", "id"),
+    meeting_fk(),
+    ForeignKeyConstraint(
+        ["workspace_id", "participant_id"], ["participants.workspace_id", "participants.id"]
+    ),
+    CheckConstraint("stable_color_key BETWEEN 0 AND 7 AND position >= 0", name="position"),
+)
+segments = Table(
+    "transcript_segments",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("public_id", String(36), nullable=False, unique=True, default=uid),
+    Column("workspace_id", String(36), nullable=False),
+    Column("meeting_id", String(36), nullable=False),
+    Column("speaker_id", String(36), nullable=False),
+    Column("ordinal", Integer, nullable=False),
+    Column("start_ms", Integer, nullable=False),
+    Column("end_ms", Integer, nullable=False),
+    Column("text", Text, nullable=False),
+    version(),
+    *timestamps(),
+    UniqueConstraint("workspace_id", "meeting_id", "public_id"),
+    UniqueConstraint("meeting_id", "ordinal"),
+    meeting_fk(),
+    ForeignKeyConstraint(
+        ["workspace_id", "meeting_id", "speaker_id"],
+        ["meeting_speakers.workspace_id", "meeting_speakers.meeting_id", "meeting_speakers.id"],
+    ),
+    CheckConstraint("start_ms >= 0 AND end_ms > start_ms AND ordinal >= 0", name="times"),
+    CheckConstraint("length(text) BETWEEN 1 AND 10000", name="text"),
+    Index("ix_segments_timeline", "meeting_id", "start_ms", "ordinal"),
+)
+tags = Table(
+    "tags",
+    metadata,
+    identity(),
+    Column("workspace_id", ForeignKey("workspaces.id", ondelete="CASCADE"), nullable=False),
+    Column("name", String(60), nullable=False),
+    Column("normalized_name", String(60), nullable=False),
+    Column("color", String, nullable=False, default="purple"),
+    version(),
+    *timestamps(),
+    UniqueConstraint("workspace_id", "id"),
+    UniqueConstraint("workspace_id", "normalized_name"),
+    CheckConstraint("color IN ('purple','blue','green','amber','rose','gray')", name="color"),
+)
+meeting_tags = Table(
+    "meeting_tags",
+    metadata,
+    Column("workspace_id", String(36), nullable=False),
+    Column("meeting_id", String(36), primary_key=True),
+    Column("tag_id", String(36), primary_key=True),
+    meeting_fk(),
+    ForeignKeyConstraint(
+        ["workspace_id", "tag_id"], ["tags.workspace_id", "tags.id"], ondelete="CASCADE"
+    ),
+    Index("ix_meeting_tags_tag", "workspace_id", "tag_id", "meeting_id"),
+)

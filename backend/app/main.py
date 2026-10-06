@@ -23,7 +23,7 @@ def live() -> dict[str, str]:
 def ready() -> JSONResponse:
     try:
         with engine.connect() as connection:
-            connection.execute(text("SELECT 1"))
+            connection.execute(text("SELECT version_num FROM alembic_version"))
             available = connection.execute(
                 text("SELECT sqlite_compileoption_used('ENABLE_FTS5')")
             ).scalar()

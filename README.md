@@ -13,6 +13,7 @@ Copy `backend/.env.example` to `backend/.env` and `frontend/.env.example` to `fr
 ```sh
 cd backend
 uv sync --frozen
+uv run alembic upgrade head
 uv run uvicorn app.main:app --reload --port 8000
 ```
 
@@ -46,3 +47,5 @@ npm run build
 Docker Compose uses a named volume for the database. Set the environment files before running `docker compose up --build`.
 
 AI is disabled by default. No public repository or hosted application has been verified yet.
+
+Database schema, seed behavior, backup and restore: [database guide](docs/database.md).

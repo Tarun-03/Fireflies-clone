@@ -1,0 +1,3109 @@
+{
+  "schema_version": 1,
+  "meetings": [
+    {
+      "title": "Engineering standup · Search reliability",
+      "occurred_at": "2026-10-06T03:45:00+00:00",
+      "duration_ms": 1400000,
+      "tag": "Engineering",
+      "participants": [
+        {
+          "display_name": "Maya Chen",
+          "email": "maya.chen@example.com"
+        },
+        {
+          "display_name": "Jordan Lee",
+          "email": "jordan.lee@example.com"
+        },
+        {
+          "display_name": "Priya Shah",
+          "email": "priya.shah@example.com"
+        },
+        {
+          "display_name": "Alex Rivera",
+          "email": "alex.rivera@example.com"
+        }
+      ],
+      "segments": [
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 0,
+          "end_ms": 28000,
+          "text": "Let’s discuss index freshness. Search results lag behind transcript corrections during the morning import peak."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 35000,
+          "end_ms": 63000,
+          "text": "The replay job left twelve documents queued after its worker restarted."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 70000,
+          "end_ms": 98000,
+          "text": "The question is how this affects someone reviewing engineering standup. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 105000,
+          "end_ms": 133000,
+          "text": "I agree with the concern. Search results lag behind transcript corrections during the morning import peak. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 140000,
+          "end_ms": 168000,
+          "text": "We decided: Update the search projection within the transcript transaction."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 175000,
+          "end_ms": 203000,
+          "text": "I will add a rollback test that verifies index consistency. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 210000,
+          "end_ms": 238000,
+          "text": "For verification, start with the case we described: The replay job left twelve documents queued after its worker restarted. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 245000,
+          "end_ms": 273000,
+          "text": "That resolves the discussion of index freshness. The agreed outcome is: Update the search projection within the transcript transaction."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 280000,
+          "end_ms": 308000,
+          "text": "Let’s discuss query latency. Long transcripts make the first notebook request slower than expected."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 309000,
+          "end_ms": 337000,
+          "text": "The current response includes all three thousand segments even on mobile."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 350000,
+          "end_ms": 378000,
+          "text": "The question is how this affects someone reviewing engineering standup. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 385000,
+          "end_ms": 413000,
+          "text": "I agree with the concern. Long transcripts make the first notebook request slower than expected. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 420000,
+          "end_ms": 448000,
+          "text": "We decided: Return a bounded transcript window and keep a separate compact timeline."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 455000,
+          "end_ms": 483000,
+          "text": "I will measure the transcript window endpoint with the long fixture. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 490000,
+          "end_ms": 518000,
+          "text": "For verification, start with the case we described: The current response includes all three thousand segments even on mobile. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 525000,
+          "end_ms": 553000,
+          "text": "That resolves the discussion of query latency. The agreed outcome is: Return a bounded transcript window and keep a separate compact timeline."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 560000,
+          "end_ms": 588000,
+          "text": "Let’s discuss ownership checks. Nested annotation routes need the same workspace checks as meetings."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 602000,
+          "end_ms": 630000,
+          "text": "A random resource UUID is not proof that its caller owns the resource."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 630000,
+          "end_ms": 658000,
+          "text": "The question is how this affects someone reviewing engineering standup. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 665000,
+          "end_ms": 693000,
+          "text": "I agree with the concern. Nested annotation routes need the same workspace checks as meetings. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 700000,
+          "end_ms": 728000,
+          "text": "We decided: Check workspace and meeting together before reading each annotation."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 735000,
+          "end_ms": 763000,
+          "text": "I will add a second-session annotation substitution test. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 770000,
+          "end_ms": 798000,
+          "text": "For verification, start with the case we described: A random resource UUID is not proof that its caller owns the resource. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 805000,
+          "end_ms": 833000,
+          "text": "That resolves the discussion of ownership checks. The agreed outcome is: Check workspace and meeting together before reading each annotation."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 840000,
+          "end_ms": 868000,
+          "text": "Let’s discuss release readiness. The release needs a repeatable migration and restart check."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 875000,
+          "end_ms": 903000,
+          "text": "A clean database starts correctly but a populated restore has not been rehearsed."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 910000,
+          "end_ms": 938000,
+          "text": "The question is how this affects someone reviewing engineering standup. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 945000,
+          "end_ms": 973000,
+          "text": "I agree with the concern. The release needs a repeatable migration and restart check. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 980000,
+          "end_ms": 1008000,
+          "text": "We decided: Use a backup copy for the restore rehearsal before release."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1015000,
+          "end_ms": 1043000,
+          "text": "I will run the restore rehearsal and record integrity results. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1050000,
+          "end_ms": 1078000,
+          "text": "For verification, start with the case we described: A clean database starts correctly but a populated restore has not been rehearsed. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1085000,
+          "end_ms": 1113000,
+          "text": "That resolves the discussion of release readiness. The agreed outcome is: Use a backup copy for the restore rehearsal before release."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1120000,
+          "end_ms": 1148000,
+          "text": "Let’s discuss operational handoff. The on-call notes do not explain the single SQLite writer boundary."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1155000,
+          "end_ms": 1183000,
+          "text": "Two replica processes could contend for the same database volume."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1190000,
+          "end_ms": 1218000,
+          "text": "The question is how this affects someone reviewing engineering standup. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1225000,
+          "end_ms": 1253000,
+          "text": "I agree with the concern. The on-call notes do not explain the single SQLite writer boundary. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1260000,
+          "end_ms": 1288000,
+          "text": "We decided: Keep one backend instance and publish the documented busy timeout."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1295000,
+          "end_ms": 1323000,
+          "text": "I will update the runbook with the storage and process limits. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1330000,
+          "end_ms": 1358000,
+          "text": "For verification, start with the case we described: Two replica processes could contend for the same database volume. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1365000,
+          "end_ms": 1393000,
+          "text": "That resolves the discussion of operational handoff. The agreed outcome is: Keep one backend instance and publish the documented busy timeout."
+        }
+      ],
+      "chapters": [
+        {
+          "title": "Index freshness",
+          "description": "Search results lag behind transcript corrections during the morning import peak.",
+          "start_ms": 0,
+          "end_ms": 280000,
+          "position": 0
+        },
+        {
+          "title": "Query latency",
+          "description": "Long transcripts make the first notebook request slower than expected.",
+          "start_ms": 280000,
+          "end_ms": 560000,
+          "position": 1
+        },
+        {
+          "title": "Ownership checks",
+          "description": "Nested annotation routes need the same workspace checks as meetings.",
+          "start_ms": 560000,
+          "end_ms": 840000,
+          "position": 2
+        },
+        {
+          "title": "Release readiness",
+          "description": "The release needs a repeatable migration and restart check.",
+          "start_ms": 840000,
+          "end_ms": 1120000,
+          "position": 3
+        },
+        {
+          "title": "Operational handoff",
+          "description": "The on-call notes do not explain the single SQLite writer boundary.",
+          "start_ms": 1120000,
+          "end_ms": 1400000,
+          "position": 4
+        }
+      ],
+      "tasks": [
+        {
+          "text": "I will add a rollback test that verifies index consistency.",
+          "segment_ordinal": 5,
+          "owner": "Jordan Lee",
+          "status": "completed"
+        },
+        {
+          "text": "I will measure the transcript window endpoint with the long fixture.",
+          "segment_ordinal": 13,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will add a second-session annotation substitution test.",
+          "segment_ordinal": 21,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will run the restore rehearsal and record integrity results.",
+          "segment_ordinal": 29,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will update the runbook with the storage and process limits.",
+          "segment_ordinal": 37,
+          "owner": "Jordan Lee",
+          "status": "open"
+        }
+      ],
+      "points": [
+        {
+          "kind": "decision",
+          "text": "Update the search projection within the transcript transaction.",
+          "segment_ordinal": 4
+        },
+        {
+          "kind": "key_point",
+          "text": "Search results lag behind transcript corrections during the morning import peak.",
+          "segment_ordinal": 0
+        },
+        {
+          "kind": "decision",
+          "text": "Return a bounded transcript window and keep a separate compact timeline.",
+          "segment_ordinal": 12
+        },
+        {
+          "kind": "key_point",
+          "text": "Long transcripts make the first notebook request slower than expected.",
+          "segment_ordinal": 8
+        },
+        {
+          "kind": "decision",
+          "text": "Check workspace and meeting together before reading each annotation.",
+          "segment_ordinal": 20
+        },
+        {
+          "kind": "key_point",
+          "text": "Nested annotation routes need the same workspace checks as meetings.",
+          "segment_ordinal": 16
+        },
+        {
+          "kind": "decision",
+          "text": "Use a backup copy for the restore rehearsal before release.",
+          "segment_ordinal": 28
+        },
+        {
+          "kind": "key_point",
+          "text": "The release needs a repeatable migration and restart check.",
+          "segment_ordinal": 24
+        },
+        {
+          "kind": "decision",
+          "text": "Keep one backend instance and publish the documented busy timeout.",
+          "segment_ordinal": 36
+        },
+        {
+          "kind": "key_point",
+          "text": "The on-call notes do not explain the single SQLite writer boundary.",
+          "segment_ordinal": 32
+        }
+      ],
+      "overview": "Update the search projection within the transcript transaction. Return a bounded transcript window and keep a separate compact timeline. Check workspace and meeting together before reading each annotation."
+    },
+    {
+      "title": "Sprint planning · A calmer notebook",
+      "occurred_at": "2026-10-05T09:00:00+00:00",
+      "duration_ms": 1400000,
+      "tag": "Product",
+      "participants": [
+        {
+          "display_name": "Maya Chen",
+          "email": "maya.chen@example.com"
+        },
+        {
+          "display_name": "Jordan Lee",
+          "email": "jordan.lee@example.com"
+        },
+        {
+          "display_name": "Priya Shah",
+          "email": "priya.shah@example.com"
+        },
+        {
+          "display_name": "Alex Rivera",
+          "email": "alex.rivera@example.com"
+        }
+      ],
+      "segments": [
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 0,
+          "end_ms": 28000,
+          "text": "Let’s discuss sprint outcome. Reviewers lose their place when they switch from summary to transcript."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 35000,
+          "end_ms": 63000,
+          "text": "Three usability sessions showed repeated manual scrolling after a tab change."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 70000,
+          "end_ms": 98000,
+          "text": "The question is how this affects someone reviewing sprint planning. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 105000,
+          "end_ms": 133000,
+          "text": "I agree with the concern. Reviewers lose their place when they switch from summary to transcript. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 140000,
+          "end_ms": 168000,
+          "text": "We decided: Preserve playback and search state across notebook panels."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 175000,
+          "end_ms": 203000,
+          "text": "I will write acceptance examples for tab switching. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 210000,
+          "end_ms": 238000,
+          "text": "For verification, start with the case we described: Three usability sessions showed repeated manual scrolling after a tab change. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 245000,
+          "end_ms": 273000,
+          "text": "That resolves the discussion of sprint outcome. The agreed outcome is: Preserve playback and search state across notebook panels."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 280000,
+          "end_ms": 308000,
+          "text": "Let’s discuss import preview. People cannot tell whether imported transcript timing is original or estimated."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 309000,
+          "end_ms": 337000,
+          "text": "Plain paragraphs have no authoritative timestamps."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 350000,
+          "end_ms": 378000,
+          "text": "The question is how this affects someone reviewing sprint planning. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 385000,
+          "end_ms": 413000,
+          "text": "I agree with the concern. People cannot tell whether imported transcript timing is original or estimated. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 420000,
+          "end_ms": 448000,
+          "text": "We decided: Show an estimated-timing warning and require acknowledgement."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 455000,
+          "end_ms": 483000,
+          "text": "I will draft the import preview warning and example files. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 490000,
+          "end_ms": 518000,
+          "text": "For verification, start with the case we described: Plain paragraphs have no authoritative timestamps. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 525000,
+          "end_ms": 553000,
+          "text": "That resolves the discussion of import preview. The agreed outcome is: Show an estimated-timing warning and require acknowledgement."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 560000,
+          "end_ms": 588000,
+          "text": "Let’s discuss task editing. Extracted action items need corrections without losing their source."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 602000,
+          "end_ms": 630000,
+          "text": "An owner can be unknown even when a commitment is explicit."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 630000,
+          "end_ms": 658000,
+          "text": "The question is how this affects someone reviewing sprint planning. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 665000,
+          "end_ms": 693000,
+          "text": "I agree with the concern. Extracted action items need corrections without losing their source. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 700000,
+          "end_ms": 728000,
+          "text": "We decided: Allow an unassigned task and keep its source segment link."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 735000,
+          "end_ms": 763000,
+          "text": "I will add task owner and due-date controls. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 770000,
+          "end_ms": 798000,
+          "text": "For verification, start with the case we described: An owner can be unknown even when a commitment is explicit. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 805000,
+          "end_ms": 833000,
+          "text": "That resolves the discussion of task editing. The agreed outcome is: Allow an unassigned task and keep its source segment link."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 840000,
+          "end_ms": 868000,
+          "text": "Let’s discuss search scope. Global search should lead directly to the relevant moment."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 875000,
+          "end_ms": 903000,
+          "text": "Title-only results force a second search inside the meeting."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 910000,
+          "end_ms": 938000,
+          "text": "The question is how this affects someone reviewing sprint planning. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 945000,
+          "end_ms": 973000,
+          "text": "I agree with the concern. Global search should lead directly to the relevant moment. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 980000,
+          "end_ms": 1008000,
+          "text": "We decided: Include speaker and timestamp context in ranked transcript results."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1015000,
+          "end_ms": 1043000,
+          "text": "I will implement a segment deep-link acceptance test. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1050000,
+          "end_ms": 1078000,
+          "text": "For verification, start with the case we described: Title-only results force a second search inside the meeting. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1085000,
+          "end_ms": 1113000,
+          "text": "That resolves the discussion of search scope. The agreed outcome is: Include speaker and timestamp context in ranked transcript results."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1120000,
+          "end_ms": 1148000,
+          "text": "Let’s discuss capacity. Export work has a dependency on a licensed Unicode font."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1155000,
+          "end_ms": 1183000,
+          "text": "The browser download limit can be reached by an uncompressed large PDF."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1190000,
+          "end_ms": 1218000,
+          "text": "The question is how this affects someone reviewing sprint planning. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1225000,
+          "end_ms": 1253000,
+          "text": "I agree with the concern. Export work has a dependency on a licensed Unicode font. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1260000,
+          "end_ms": 1288000,
+          "text": "We decided: Reserve time for compressed exports and explicit part downloads."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1295000,
+          "end_ms": 1323000,
+          "text": "I will verify the largest PDF through the browser proxy. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1330000,
+          "end_ms": 1358000,
+          "text": "For verification, start with the case we described: The browser download limit can be reached by an uncompressed large PDF. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1365000,
+          "end_ms": 1393000,
+          "text": "That resolves the discussion of capacity. The agreed outcome is: Reserve time for compressed exports and explicit part downloads."
+        }
+      ],
+      "chapters": [
+        {
+          "title": "Sprint outcome",
+          "description": "Reviewers lose their place when they switch from summary to transcript.",
+          "start_ms": 0,
+          "end_ms": 280000,
+          "position": 0
+        },
+        {
+          "title": "Import preview",
+          "description": "People cannot tell whether imported transcript timing is original or estimated.",
+          "start_ms": 280000,
+          "end_ms": 560000,
+          "position": 1
+        },
+        {
+          "title": "Task editing",
+          "description": "Extracted action items need corrections without losing their source.",
+          "start_ms": 560000,
+          "end_ms": 840000,
+          "position": 2
+        },
+        {
+          "title": "Search scope",
+          "description": "Global search should lead directly to the relevant moment.",
+          "start_ms": 840000,
+          "end_ms": 1120000,
+          "position": 3
+        },
+        {
+          "title": "Capacity",
+          "description": "Export work has a dependency on a licensed Unicode font.",
+          "start_ms": 1120000,
+          "end_ms": 1400000,
+          "position": 4
+        }
+      ],
+      "tasks": [
+        {
+          "text": "I will write acceptance examples for tab switching.",
+          "segment_ordinal": 5,
+          "owner": "Jordan Lee",
+          "status": "completed"
+        },
+        {
+          "text": "I will draft the import preview warning and example files.",
+          "segment_ordinal": 13,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will add task owner and due-date controls.",
+          "segment_ordinal": 21,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will implement a segment deep-link acceptance test.",
+          "segment_ordinal": 29,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will verify the largest PDF through the browser proxy.",
+          "segment_ordinal": 37,
+          "owner": "Jordan Lee",
+          "status": "open"
+        }
+      ],
+      "points": [
+        {
+          "kind": "decision",
+          "text": "Preserve playback and search state across notebook panels.",
+          "segment_ordinal": 4
+        },
+        {
+          "kind": "key_point",
+          "text": "Reviewers lose their place when they switch from summary to transcript.",
+          "segment_ordinal": 0
+        },
+        {
+          "kind": "decision",
+          "text": "Show an estimated-timing warning and require acknowledgement.",
+          "segment_ordinal": 12
+        },
+        {
+          "kind": "key_point",
+          "text": "People cannot tell whether imported transcript timing is original or estimated.",
+          "segment_ordinal": 8
+        },
+        {
+          "kind": "decision",
+          "text": "Allow an unassigned task and keep its source segment link.",
+          "segment_ordinal": 20
+        },
+        {
+          "kind": "key_point",
+          "text": "Extracted action items need corrections without losing their source.",
+          "segment_ordinal": 16
+        },
+        {
+          "kind": "decision",
+          "text": "Include speaker and timestamp context in ranked transcript results.",
+          "segment_ordinal": 28
+        },
+        {
+          "kind": "key_point",
+          "text": "Global search should lead directly to the relevant moment.",
+          "segment_ordinal": 24
+        },
+        {
+          "kind": "decision",
+          "text": "Reserve time for compressed exports and explicit part downloads.",
+          "segment_ordinal": 36
+        },
+        {
+          "kind": "key_point",
+          "text": "Export work has a dependency on a licensed Unicode font.",
+          "segment_ordinal": 32
+        }
+      ],
+      "overview": "Preserve playback and search state across notebook panels. Show an estimated-timing warning and require acknowledgement. Allow an unassigned task and keep its source segment link."
+    },
+    {
+      "title": "Product discovery · Meeting follow-through",
+      "occurred_at": "2026-10-04T23:30:00+00:00",
+      "duration_ms": 1400000,
+      "tag": "Research",
+      "participants": [
+        {
+          "display_name": "Maya Chen",
+          "email": "maya.chen@example.com"
+        },
+        {
+          "display_name": "Jordan Lee",
+          "email": "jordan.lee@example.com"
+        },
+        {
+          "display_name": "Priya Shah",
+          "email": "priya.shah@example.com"
+        },
+        {
+          "display_name": "Alex Rivera",
+          "email": "alex.rivera@example.com"
+        }
+      ],
+      "segments": [
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 0,
+          "end_ms": 28000,
+          "text": "Let’s discuss problem framing. Teams capture meetings but still rewrite commitments in separate tools."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 35000,
+          "end_ms": 63000,
+          "text": "Interview participants described checking notes again before acting."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 70000,
+          "end_ms": 98000,
+          "text": "The question is how this affects someone reviewing product discovery. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 105000,
+          "end_ms": 133000,
+          "text": "I agree with the concern. Teams capture meetings but still rewrite commitments in separate tools. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 140000,
+          "end_ms": 168000,
+          "text": "We decided: Focus this prototype on reviewable commitments with evidence."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 175000,
+          "end_ms": 203000,
+          "text": "I will map the commitment review journey. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 210000,
+          "end_ms": 238000,
+          "text": "For verification, start with the case we described: Interview participants described checking notes again before acting. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 245000,
+          "end_ms": 273000,
+          "text": "That resolves the discussion of problem framing. The agreed outcome is: Focus this prototype on reviewable commitments with evidence."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 280000,
+          "end_ms": 308000,
+          "text": "Let’s discuss trust signals. Readers need to know whether a summary reflects the current transcript."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 309000,
+          "end_ms": 337000,
+          "text": "Editing a speaker correction can make an old attribution misleading."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 350000,
+          "end_ms": 378000,
+          "text": "The question is how this affects someone reviewing product discovery. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 385000,
+          "end_ms": 413000,
+          "text": "I agree with the concern. Readers need to know whether a summary reflects the current transcript. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 420000,
+          "end_ms": 448000,
+          "text": "We decided: Show summary provenance and a stale-content indicator."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 455000,
+          "end_ms": 483000,
+          "text": "I will test provenance wording with five synthetic scenarios. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 490000,
+          "end_ms": 518000,
+          "text": "For verification, start with the case we described: Editing a speaker correction can make an old attribution misleading. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 525000,
+          "end_ms": 553000,
+          "text": "That resolves the discussion of trust signals. The agreed outcome is: Show summary provenance and a stale-content indicator."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 560000,
+          "end_ms": 588000,
+          "text": "Let’s discuss evidence navigation. People want the surrounding conversation before accepting a conclusion."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 602000,
+          "end_ms": 630000,
+          "text": "A timestamp without a speaker or excerpt provides too little context."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 630000,
+          "end_ms": 658000,
+          "text": "The question is how this affects someone reviewing product discovery. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 665000,
+          "end_ms": 693000,
+          "text": "I agree with the concern. People want the surrounding conversation before accepting a conclusion. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 700000,
+          "end_ms": 728000,
+          "text": "We decided: Make every evidence citation navigate to a readable segment window."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 735000,
+          "end_ms": 763000,
+          "text": "I will sketch the citation interaction for mobile. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 770000,
+          "end_ms": 798000,
+          "text": "For verification, start with the case we described: A timestamp without a speaker or excerpt provides too little context. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 805000,
+          "end_ms": 833000,
+          "text": "That resolves the discussion of evidence navigation. The agreed outcome is: Make every evidence citation navigate to a readable segment window."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 840000,
+          "end_ms": 868000,
+          "text": "Let’s discuss personal workspace. A demo visitor should be able to explore without changing another visitor’s work."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 875000,
+          "end_ms": 903000,
+          "text": "A single shared writable demo would make evaluation unpredictable."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 910000,
+          "end_ms": 938000,
+          "text": "The question is how this affects someone reviewing product discovery. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 945000,
+          "end_ms": 973000,
+          "text": "I agree with the concern. A demo visitor should be able to explore without changing another visitor’s work. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 980000,
+          "end_ms": 1008000,
+          "text": "We decided: Create a separate anonymous workspace for each browser session."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1015000,
+          "end_ms": 1043000,
+          "text": "I will write the cookie-loss explanation for settings. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1050000,
+          "end_ms": 1078000,
+          "text": "For verification, start with the case we described: A single shared writable demo would make evaluation unpredictable. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1085000,
+          "end_ms": 1113000,
+          "text": "That resolves the discussion of personal workspace. The agreed outcome is: Create a separate anonymous workspace for each browser session."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1120000,
+          "end_ms": 1148000,
+          "text": "Let’s discuss success criteria. The useful outcome is a completed follow-up rather than a summary count."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1155000,
+          "end_ms": 1183000,
+          "text": "A task that can be reopened and corrected is more useful than a static checklist."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1190000,
+          "end_ms": 1218000,
+          "text": "The question is how this affects someone reviewing product discovery. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1225000,
+          "end_ms": 1253000,
+          "text": "I agree with the concern. The useful outcome is a completed follow-up rather than a summary count. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1260000,
+          "end_ms": 1288000,
+          "text": "We decided: Evaluate the full review-to-completion workflow."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1295000,
+          "end_ms": 1323000,
+          "text": "I will prepare the task correction evaluation script. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1330000,
+          "end_ms": 1358000,
+          "text": "For verification, start with the case we described: A task that can be reopened and corrected is more useful than a static checklist. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1365000,
+          "end_ms": 1393000,
+          "text": "That resolves the discussion of success criteria. The agreed outcome is: Evaluate the full review-to-completion workflow."
+        }
+      ],
+      "chapters": [
+        {
+          "title": "Problem framing",
+          "description": "Teams capture meetings but still rewrite commitments in separate tools.",
+          "start_ms": 0,
+          "end_ms": 280000,
+          "position": 0
+        },
+        {
+          "title": "Trust signals",
+          "description": "Readers need to know whether a summary reflects the current transcript.",
+          "start_ms": 280000,
+          "end_ms": 560000,
+          "position": 1
+        },
+        {
+          "title": "Evidence navigation",
+          "description": "People want the surrounding conversation before accepting a conclusion.",
+          "start_ms": 560000,
+          "end_ms": 840000,
+          "position": 2
+        },
+        {
+          "title": "Personal workspace",
+          "description": "A demo visitor should be able to explore without changing another visitor’s work.",
+          "start_ms": 840000,
+          "end_ms": 1120000,
+          "position": 3
+        },
+        {
+          "title": "Success criteria",
+          "description": "The useful outcome is a completed follow-up rather than a summary count.",
+          "start_ms": 1120000,
+          "end_ms": 1400000,
+          "position": 4
+        }
+      ],
+      "tasks": [
+        {
+          "text": "I will map the commitment review journey.",
+          "segment_ordinal": 5,
+          "owner": "Jordan Lee",
+          "status": "completed"
+        },
+        {
+          "text": "I will test provenance wording with five synthetic scenarios.",
+          "segment_ordinal": 13,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will sketch the citation interaction for mobile.",
+          "segment_ordinal": 21,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will write the cookie-loss explanation for settings.",
+          "segment_ordinal": 29,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will prepare the task correction evaluation script.",
+          "segment_ordinal": 37,
+          "owner": "Jordan Lee",
+          "status": "open"
+        }
+      ],
+      "points": [
+        {
+          "kind": "decision",
+          "text": "Focus this prototype on reviewable commitments with evidence.",
+          "segment_ordinal": 4
+        },
+        {
+          "kind": "key_point",
+          "text": "Teams capture meetings but still rewrite commitments in separate tools.",
+          "segment_ordinal": 0
+        },
+        {
+          "kind": "decision",
+          "text": "Show summary provenance and a stale-content indicator.",
+          "segment_ordinal": 12
+        },
+        {
+          "kind": "key_point",
+          "text": "Readers need to know whether a summary reflects the current transcript.",
+          "segment_ordinal": 8
+        },
+        {
+          "kind": "decision",
+          "text": "Make every evidence citation navigate to a readable segment window.",
+          "segment_ordinal": 20
+        },
+        {
+          "kind": "key_point",
+          "text": "People want the surrounding conversation before accepting a conclusion.",
+          "segment_ordinal": 16
+        },
+        {
+          "kind": "decision",
+          "text": "Create a separate anonymous workspace for each browser session.",
+          "segment_ordinal": 28
+        },
+        {
+          "kind": "key_point",
+          "text": "A demo visitor should be able to explore without changing another visitor’s work.",
+          "segment_ordinal": 24
+        },
+        {
+          "kind": "decision",
+          "text": "Evaluate the full review-to-completion workflow.",
+          "segment_ordinal": 36
+        },
+        {
+          "kind": "key_point",
+          "text": "The useful outcome is a completed follow-up rather than a summary count.",
+          "segment_ordinal": 32
+        }
+      ],
+      "overview": "Focus this prototype on reviewable commitments with evidence. Show summary provenance and a stale-content indicator. Make every evidence citation navigate to a readable segment window."
+    },
+    {
+      "title": "Design review · Transcript navigation",
+      "occurred_at": "2026-10-03T13:00:00+00:00",
+      "duration_ms": 1400000,
+      "tag": "Design",
+      "participants": [
+        {
+          "display_name": "Maya Chen",
+          "email": "maya.chen@example.com"
+        },
+        {
+          "display_name": "Jordan Lee",
+          "email": "jordan.lee@example.com"
+        },
+        {
+          "display_name": "Priya Shah",
+          "email": "priya.shah@example.com"
+        },
+        {
+          "display_name": "Alex Rivera",
+          "email": "alex.rivera@example.com"
+        }
+      ],
+      "segments": [
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 0,
+          "end_ms": 28000,
+          "text": "Let’s discuss information hierarchy. The notebook header competes with the transcript for vertical space."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 35000,
+          "end_ms": 63000,
+          "text": "Large cards leave only two speaker turns visible on smaller screens."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 70000,
+          "end_ms": 98000,
+          "text": "The question is how this affects someone reviewing design review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 105000,
+          "end_ms": 133000,
+          "text": "I agree with the concern. The notebook header competes with the transcript for vertical space. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 140000,
+          "end_ms": 168000,
+          "text": "We decided: Use a compact header and two text-focused panels."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 175000,
+          "end_ms": 203000,
+          "text": "I will reduce the header spacing using the four-pixel grid. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 210000,
+          "end_ms": 238000,
+          "text": "For verification, start with the case we described: Large cards leave only two speaker turns visible on smaller screens. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 245000,
+          "end_ms": 273000,
+          "text": "That resolves the discussion of information hierarchy. The agreed outcome is: Use a compact header and two text-focused panels."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 280000,
+          "end_ms": 308000,
+          "text": "Let’s discuss active line. Search matches and current playback use similar visual emphasis."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 309000,
+          "end_ms": 337000,
+          "text": "A reader cannot tell which state is driving the highlight."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 350000,
+          "end_ms": 378000,
+          "text": "The question is how this affects someone reviewing design review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 385000,
+          "end_ms": 413000,
+          "text": "I agree with the concern. Search matches and current playback use similar visual emphasis. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 420000,
+          "end_ms": 448000,
+          "text": "We decided: Use separate semantic colors for search and active playback."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 455000,
+          "end_ms": 483000,
+          "text": "I will check both highlight colors in light and dark themes. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 490000,
+          "end_ms": 518000,
+          "text": "For verification, start with the case we described: A reader cannot tell which state is driving the highlight. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 525000,
+          "end_ms": 553000,
+          "text": "That resolves the discussion of active line. The agreed outcome is: Use separate semantic colors for search and active playback."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 560000,
+          "end_ms": 588000,
+          "text": "Let’s discuss keyboard access. Icon-only actions need discoverable labels and a clear focus ring."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 602000,
+          "end_ms": 630000,
+          "text": "A tooltip alone does not label a button for assistive technology."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 630000,
+          "end_ms": 658000,
+          "text": "The question is how this affects someone reviewing design review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 665000,
+          "end_ms": 693000,
+          "text": "I agree with the concern. Icon-only actions need discoverable labels and a clear focus ring. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 700000,
+          "end_ms": 728000,
+          "text": "We decided: Give each action an accessible name and a visible focus treatment."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 735000,
+          "end_ms": 763000,
+          "text": "I will review annotation controls using only the keyboard. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 770000,
+          "end_ms": 798000,
+          "text": "For verification, start with the case we described: A tooltip alone does not label a button for assistive technology. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 805000,
+          "end_ms": 833000,
+          "text": "That resolves the discussion of keyboard access. The agreed outcome is: Give each action an accessible name and a visible focus treatment."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 840000,
+          "end_ms": 868000,
+          "text": "Let’s discuss mobile layout. Two columns become too narrow at phone width."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 875000,
+          "end_ms": 903000,
+          "text": "Long speaker names increase line wrapping near the player."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 910000,
+          "end_ms": 938000,
+          "text": "The question is how this affects someone reviewing design review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 945000,
+          "end_ms": 973000,
+          "text": "I agree with the concern. Two columns become too narrow at phone width. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 980000,
+          "end_ms": 1008000,
+          "text": "We decided: Use Summary and Transcript tabs while retaining one player state."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1015000,
+          "end_ms": 1043000,
+          "text": "I will capture the notebook at 390 and 768 pixels. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1050000,
+          "end_ms": 1078000,
+          "text": "For verification, start with the case we described: Long speaker names increase line wrapping near the player. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1085000,
+          "end_ms": 1113000,
+          "text": "That resolves the discussion of mobile layout. The agreed outcome is: Use Summary and Transcript tabs while retaining one player state."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1120000,
+          "end_ms": 1148000,
+          "text": "Let’s discuss follow mode. Automatic scrolling interrupts someone reading an earlier passage."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1155000,
+          "end_ms": 1183000,
+          "text": "The current prototype scrolls again on every clock tick."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1190000,
+          "end_ms": 1218000,
+          "text": "The question is how this affects someone reviewing design review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1225000,
+          "end_ms": 1253000,
+          "text": "I agree with the concern. Automatic scrolling interrupts someone reading an earlier passage. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1260000,
+          "end_ms": 1288000,
+          "text": "We decided: Pause following on manual scroll and provide a Follow playback action."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1295000,
+          "end_ms": 1323000,
+          "text": "I will test follow mode while searching an earlier segment. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1330000,
+          "end_ms": 1358000,
+          "text": "For verification, start with the case we described: The current prototype scrolls again on every clock tick. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1365000,
+          "end_ms": 1393000,
+          "text": "That resolves the discussion of follow mode. The agreed outcome is: Pause following on manual scroll and provide a Follow playback action."
+        }
+      ],
+      "chapters": [
+        {
+          "title": "Information hierarchy",
+          "description": "The notebook header competes with the transcript for vertical space.",
+          "start_ms": 0,
+          "end_ms": 280000,
+          "position": 0
+        },
+        {
+          "title": "Active line",
+          "description": "Search matches and current playback use similar visual emphasis.",
+          "start_ms": 280000,
+          "end_ms": 560000,
+          "position": 1
+        },
+        {
+          "title": "Keyboard access",
+          "description": "Icon-only actions need discoverable labels and a clear focus ring.",
+          "start_ms": 560000,
+          "end_ms": 840000,
+          "position": 2
+        },
+        {
+          "title": "Mobile layout",
+          "description": "Two columns become too narrow at phone width.",
+          "start_ms": 840000,
+          "end_ms": 1120000,
+          "position": 3
+        },
+        {
+          "title": "Follow mode",
+          "description": "Automatic scrolling interrupts someone reading an earlier passage.",
+          "start_ms": 1120000,
+          "end_ms": 1400000,
+          "position": 4
+        }
+      ],
+      "tasks": [
+        {
+          "text": "I will reduce the header spacing using the four-pixel grid.",
+          "segment_ordinal": 5,
+          "owner": "Jordan Lee",
+          "status": "completed"
+        },
+        {
+          "text": "I will check both highlight colors in light and dark themes.",
+          "segment_ordinal": 13,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will review annotation controls using only the keyboard.",
+          "segment_ordinal": 21,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will capture the notebook at 390 and 768 pixels.",
+          "segment_ordinal": 29,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will test follow mode while searching an earlier segment.",
+          "segment_ordinal": 37,
+          "owner": "Jordan Lee",
+          "status": "open"
+        }
+      ],
+      "points": [
+        {
+          "kind": "decision",
+          "text": "Use a compact header and two text-focused panels.",
+          "segment_ordinal": 4
+        },
+        {
+          "kind": "key_point",
+          "text": "The notebook header competes with the transcript for vertical space.",
+          "segment_ordinal": 0
+        },
+        {
+          "kind": "decision",
+          "text": "Use separate semantic colors for search and active playback.",
+          "segment_ordinal": 12
+        },
+        {
+          "kind": "key_point",
+          "text": "Search matches and current playback use similar visual emphasis.",
+          "segment_ordinal": 8
+        },
+        {
+          "kind": "decision",
+          "text": "Give each action an accessible name and a visible focus treatment.",
+          "segment_ordinal": 20
+        },
+        {
+          "kind": "key_point",
+          "text": "Icon-only actions need discoverable labels and a clear focus ring.",
+          "segment_ordinal": 16
+        },
+        {
+          "kind": "decision",
+          "text": "Use Summary and Transcript tabs while retaining one player state.",
+          "segment_ordinal": 28
+        },
+        {
+          "kind": "key_point",
+          "text": "Two columns become too narrow at phone width.",
+          "segment_ordinal": 24
+        },
+        {
+          "kind": "decision",
+          "text": "Pause following on manual scroll and provide a Follow playback action.",
+          "segment_ordinal": 36
+        },
+        {
+          "kind": "key_point",
+          "text": "Automatic scrolling interrupts someone reading an earlier passage.",
+          "segment_ordinal": 32
+        }
+      ],
+      "overview": "Use a compact header and two text-focused panels. Use separate semantic colors for search and active playback. Give each action an accessible name and a visible focus treatment."
+    },
+    {
+      "title": "Customer interview · Harbor Studio",
+      "occurred_at": "2026-10-02T07:30:00+00:00",
+      "duration_ms": 1400000,
+      "tag": "Research",
+      "participants": [
+        {
+          "display_name": "Maya Chen",
+          "email": "maya.chen@example.com"
+        },
+        {
+          "display_name": "Jordan Lee",
+          "email": "jordan.lee@example.com"
+        },
+        {
+          "display_name": "Priya Shah",
+          "email": "priya.shah@example.com"
+        },
+        {
+          "display_name": "Alex Rivera",
+          "email": "alex.rivera@example.com"
+        }
+      ],
+      "segments": [
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 0,
+          "end_ms": 28000,
+          "text": "Let’s discuss current workflow. The fictional studio reviews research calls once each week."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 35000,
+          "end_ms": 63000,
+          "text": "Reviewers currently copy quotes into a shared draft before discussing themes."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 70000,
+          "end_ms": 98000,
+          "text": "The question is how this affects someone reviewing customer interview. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 105000,
+          "end_ms": 133000,
+          "text": "I agree with the concern. The fictional studio reviews research calls once each week. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 140000,
+          "end_ms": 168000,
+          "text": "We decided: Keep exact quoted excerpts distinguishable from generated interpretation."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 175000,
+          "end_ms": 203000,
+          "text": "I will prepare a quote-focused review example. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 210000,
+          "end_ms": 238000,
+          "text": "For verification, start with the case we described: Reviewers currently copy quotes into a shared draft before discussing themes. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 245000,
+          "end_ms": 273000,
+          "text": "That resolves the discussion of current workflow. The agreed outcome is: Keep exact quoted excerpts distinguishable from generated interpretation."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 280000,
+          "end_ms": 308000,
+          "text": "Let’s discuss finding context. Participants often remember the topic but not the meeting title."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 309000,
+          "end_ms": 337000,
+          "text": "They described searching for a phrase used during the conversation."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 350000,
+          "end_ms": 378000,
+          "text": "The question is how this affects someone reviewing customer interview. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 385000,
+          "end_ms": 413000,
+          "text": "I agree with the concern. Participants often remember the topic but not the meeting title. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 420000,
+          "end_ms": 448000,
+          "text": "We decided: Support transcript keywords in addition to title search."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 455000,
+          "end_ms": 483000,
+          "text": "I will add phrase search examples to the evaluation data. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 490000,
+          "end_ms": 518000,
+          "text": "For verification, start with the case we described: They described searching for a phrase used during the conversation. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 525000,
+          "end_ms": 553000,
+          "text": "That resolves the discussion of finding context. The agreed outcome is: Support transcript keywords in addition to title search."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 560000,
+          "end_ms": 588000,
+          "text": "Let’s discuss follow-up ownership. The team discusses ownership before assigning the next action."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 602000,
+          "end_ms": 630000,
+          "text": "Statements such as someone should check this do not identify an owner."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 630000,
+          "end_ms": 658000,
+          "text": "The question is how this affects someone reviewing customer interview. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Unknown speaker",
+          "start_ms": 665000,
+          "end_ms": 693000,
+          "text": "I agree with the concern. The team discusses ownership before assigning the next action. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 700000,
+          "end_ms": 728000,
+          "text": "We decided: Leave vague commitments unassigned rather than inventing a person."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 735000,
+          "end_ms": 763000,
+          "text": "I will collect explicit and ambiguous action examples. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 770000,
+          "end_ms": 798000,
+          "text": "For verification, start with the case we described: Statements such as someone should check this do not identify an owner. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 805000,
+          "end_ms": 833000,
+          "text": "That resolves the discussion of follow-up ownership. The agreed outcome is: Leave vague commitments unassigned rather than inventing a person."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 840000,
+          "end_ms": 868000,
+          "text": "Let’s discuss export preferences. Reviewers need a readable document for an offline workshop."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 875000,
+          "end_ms": 903000,
+          "text": "Speaker names matter more than timestamps in the workshop handout."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 910000,
+          "end_ms": 938000,
+          "text": "The question is how this affects someone reviewing customer interview. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 945000,
+          "end_ms": 973000,
+          "text": "I agree with the concern. Reviewers need a readable document for an offline workshop. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 980000,
+          "end_ms": 1008000,
+          "text": "We decided: Offer independent speaker and timestamp export options."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1015000,
+          "end_ms": 1043000,
+          "text": "I will review the PDF handout with speaker labels enabled. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1050000,
+          "end_ms": 1078000,
+          "text": "For verification, start with the case we described: Speaker names matter more than timestamps in the workshop handout. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1085000,
+          "end_ms": 1113000,
+          "text": "That resolves the discussion of export preferences. The agreed outcome is: Offer independent speaker and timestamp export options."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1120000,
+          "end_ms": 1148000,
+          "text": "Let’s discuss demo expectations. Interview material in the assignment should never identify a real customer."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1155000,
+          "end_ms": 1183000,
+          "text": "All names, organizations, quotes, and scenarios here are synthetic."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1190000,
+          "end_ms": 1218000,
+          "text": "The question is how this affects someone reviewing customer interview. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1225000,
+          "end_ms": 1253000,
+          "text": "I agree with the concern. Interview material in the assignment should never identify a real customer. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1260000,
+          "end_ms": 1288000,
+          "text": "We decided: Disclose the synthetic dataset in the notebook and documentation."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1295000,
+          "end_ms": 1323000,
+          "text": "I will verify the example downloads contain only synthetic content. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1330000,
+          "end_ms": 1358000,
+          "text": "For verification, start with the case we described: All names, organizations, quotes, and scenarios here are synthetic. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1365000,
+          "end_ms": 1393000,
+          "text": "That resolves the discussion of demo expectations. The agreed outcome is: Disclose the synthetic dataset in the notebook and documentation."
+        }
+      ],
+      "chapters": [
+        {
+          "title": "Current workflow",
+          "description": "The fictional studio reviews research calls once each week.",
+          "start_ms": 0,
+          "end_ms": 280000,
+          "position": 0
+        },
+        {
+          "title": "Finding context",
+          "description": "Participants often remember the topic but not the meeting title.",
+          "start_ms": 280000,
+          "end_ms": 560000,
+          "position": 1
+        },
+        {
+          "title": "Follow-up ownership",
+          "description": "The team discusses ownership before assigning the next action.",
+          "start_ms": 560000,
+          "end_ms": 840000,
+          "position": 2
+        },
+        {
+          "title": "Export preferences",
+          "description": "Reviewers need a readable document for an offline workshop.",
+          "start_ms": 840000,
+          "end_ms": 1120000,
+          "position": 3
+        },
+        {
+          "title": "Demo expectations",
+          "description": "Interview material in the assignment should never identify a real customer.",
+          "start_ms": 1120000,
+          "end_ms": 1400000,
+          "position": 4
+        }
+      ],
+      "tasks": [
+        {
+          "text": "I will prepare a quote-focused review example.",
+          "segment_ordinal": 5,
+          "owner": "Jordan Lee",
+          "status": "completed"
+        },
+        {
+          "text": "I will add phrase search examples to the evaluation data.",
+          "segment_ordinal": 13,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will collect explicit and ambiguous action examples.",
+          "segment_ordinal": 21,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will review the PDF handout with speaker labels enabled.",
+          "segment_ordinal": 29,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will verify the example downloads contain only synthetic content.",
+          "segment_ordinal": 37,
+          "owner": "Jordan Lee",
+          "status": "open"
+        }
+      ],
+      "points": [
+        {
+          "kind": "decision",
+          "text": "Keep exact quoted excerpts distinguishable from generated interpretation.",
+          "segment_ordinal": 4
+        },
+        {
+          "kind": "key_point",
+          "text": "The fictional studio reviews research calls once each week.",
+          "segment_ordinal": 0
+        },
+        {
+          "kind": "decision",
+          "text": "Support transcript keywords in addition to title search.",
+          "segment_ordinal": 12
+        },
+        {
+          "kind": "key_point",
+          "text": "Participants often remember the topic but not the meeting title.",
+          "segment_ordinal": 8
+        },
+        {
+          "kind": "decision",
+          "text": "Leave vague commitments unassigned rather than inventing a person.",
+          "segment_ordinal": 20
+        },
+        {
+          "kind": "key_point",
+          "text": "The team discusses ownership before assigning the next action.",
+          "segment_ordinal": 16
+        },
+        {
+          "kind": "decision",
+          "text": "Offer independent speaker and timestamp export options.",
+          "segment_ordinal": 28
+        },
+        {
+          "kind": "key_point",
+          "text": "Reviewers need a readable document for an offline workshop.",
+          "segment_ordinal": 24
+        },
+        {
+          "kind": "decision",
+          "text": "Disclose the synthetic dataset in the notebook and documentation.",
+          "segment_ordinal": 36
+        },
+        {
+          "kind": "key_point",
+          "text": "Interview material in the assignment should never identify a real customer.",
+          "segment_ordinal": 32
+        }
+      ],
+      "overview": "Keep exact quoted excerpts distinguishable from generated interpretation. Support transcript keywords in addition to title search. Leave vague commitments unassigned rather than inventing a person."
+    },
+    {
+      "title": "Onboarding · Platform walkthrough",
+      "occurred_at": "2026-10-01T10:00:00+00:00",
+      "duration_ms": 1400000,
+      "tag": "Operations",
+      "participants": [
+        {
+          "display_name": "Maya Chen",
+          "email": "maya.chen@example.com"
+        },
+        {
+          "display_name": "Jordan Lee",
+          "email": "jordan.lee@example.com"
+        },
+        {
+          "display_name": "Priya Shah",
+          "email": "priya.shah@example.com"
+        },
+        {
+          "display_name": "Alex Rivera",
+          "email": "alex.rivera@example.com"
+        }
+      ],
+      "segments": [
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 0,
+          "end_ms": 28000,
+          "text": "Let’s discuss request flow. The browser should only communicate with the same-origin frontend."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 35000,
+          "end_ms": 63000,
+          "text": "The backend service token must never appear in a browser request."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 70000,
+          "end_ms": 98000,
+          "text": "The question is how this affects someone reviewing onboarding. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 105000,
+          "end_ms": 133000,
+          "text": "I agree with the concern. The browser should only communicate with the same-origin frontend. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 140000,
+          "end_ms": 168000,
+          "text": "We decided: Use narrow frontend route handlers that inject trusted service headers."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 175000,
+          "end_ms": 203000,
+          "text": "I will draw the browser-to-database request diagram. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 210000,
+          "end_ms": 238000,
+          "text": "For verification, start with the case we described: The backend service token must never appear in a browser request. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 245000,
+          "end_ms": 273000,
+          "text": "That resolves the discussion of request flow. The agreed outcome is: Use narrow frontend route handlers that inject trusted service headers."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 280000,
+          "end_ms": 308000,
+          "text": "Let’s discuss database changes. Schema changes need a reproducible history."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 309000,
+          "end_ms": 337000,
+          "text": "Creating tables at application import time makes upgrades hard to review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 350000,
+          "end_ms": 378000,
+          "text": "The question is how this affects someone reviewing onboarding. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 385000,
+          "end_ms": 413000,
+          "text": "I agree with the concern. Schema changes need a reproducible history. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 420000,
+          "end_ms": 448000,
+          "text": "We decided: Run Alembic migrations before the server accepts requests."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 455000,
+          "end_ms": 483000,
+          "text": "I will rehearse a fresh install from the lockfiles. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 490000,
+          "end_ms": 518000,
+          "text": "For verification, start with the case we described: Creating tables at application import time makes upgrades hard to review. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 525000,
+          "end_ms": 553000,
+          "text": "That resolves the discussion of database changes. The agreed outcome is: Run Alembic migrations before the server accepts requests."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 560000,
+          "end_ms": 588000,
+          "text": "Let’s discuss local setup. A new developer needs explicit environment variable instructions."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 602000,
+          "end_ms": 630000,
+          "text": "The service token must match between frontend and backend."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 630000,
+          "end_ms": 658000,
+          "text": "The question is how this affects someone reviewing onboarding. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 665000,
+          "end_ms": 693000,
+          "text": "I agree with the concern. A new developer needs explicit environment variable instructions. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 700000,
+          "end_ms": 728000,
+          "text": "We decided: Provide empty example files and commands for generating separate secrets."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 735000,
+          "end_ms": 763000,
+          "text": "I will validate the setup instructions in a clean directory. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 770000,
+          "end_ms": 798000,
+          "text": "For verification, start with the case we described: The service token must match between frontend and backend. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 805000,
+          "end_ms": 833000,
+          "text": "That resolves the discussion of local setup. The agreed outcome is: Provide empty example files and commands for generating separate secrets."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 840000,
+          "end_ms": 868000,
+          "text": "Let’s discuss failure behavior. A provider outage must not prevent ordinary meeting editing."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 875000,
+          "end_ms": 903000,
+          "text": "Creation can produce an extractive summary without an external call."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 910000,
+          "end_ms": 938000,
+          "text": "The question is how this affects someone reviewing onboarding. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 945000,
+          "end_ms": 973000,
+          "text": "I agree with the concern. A provider outage must not prevent ordinary meeting editing. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 980000,
+          "end_ms": 1008000,
+          "text": "We decided: Keep optional provider generation outside the creation transaction."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1015000,
+          "end_ms": 1043000,
+          "text": "I will test creation with the AI provider disabled. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1050000,
+          "end_ms": 1078000,
+          "text": "For verification, start with the case we described: Creation can produce an extractive summary without an external call. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1085000,
+          "end_ms": 1113000,
+          "text": "That resolves the discussion of failure behavior. The agreed outcome is: Keep optional provider generation outside the creation transaction."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1120000,
+          "end_ms": 1148000,
+          "text": "Let’s discuss support boundaries. Cookie expiry creates a new anonymous workspace."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1155000,
+          "end_ms": 1183000,
+          "text": "The old data should remain stored until an operator applies retention policy."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1190000,
+          "end_ms": 1218000,
+          "text": "The question is how this affects someone reviewing onboarding. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1225000,
+          "end_ms": 1253000,
+          "text": "I agree with the concern. Cookie expiry creates a new anonymous workspace. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1260000,
+          "end_ms": 1288000,
+          "text": "We decided: Explain the limitation without silently resetting existing records."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1295000,
+          "end_ms": 1323000,
+          "text": "I will add cookie expiry and storage notes to the runbook. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1330000,
+          "end_ms": 1358000,
+          "text": "For verification, start with the case we described: The old data should remain stored until an operator applies retention policy. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1365000,
+          "end_ms": 1393000,
+          "text": "That resolves the discussion of support boundaries. The agreed outcome is: Explain the limitation without silently resetting existing records."
+        }
+      ],
+      "chapters": [
+        {
+          "title": "Request flow",
+          "description": "The browser should only communicate with the same-origin frontend.",
+          "start_ms": 0,
+          "end_ms": 280000,
+          "position": 0
+        },
+        {
+          "title": "Database changes",
+          "description": "Schema changes need a reproducible history.",
+          "start_ms": 280000,
+          "end_ms": 560000,
+          "position": 1
+        },
+        {
+          "title": "Local setup",
+          "description": "A new developer needs explicit environment variable instructions.",
+          "start_ms": 560000,
+          "end_ms": 840000,
+          "position": 2
+        },
+        {
+          "title": "Failure behavior",
+          "description": "A provider outage must not prevent ordinary meeting editing.",
+          "start_ms": 840000,
+          "end_ms": 1120000,
+          "position": 3
+        },
+        {
+          "title": "Support boundaries",
+          "description": "Cookie expiry creates a new anonymous workspace.",
+          "start_ms": 1120000,
+          "end_ms": 1400000,
+          "position": 4
+        }
+      ],
+      "tasks": [
+        {
+          "text": "I will draw the browser-to-database request diagram.",
+          "segment_ordinal": 5,
+          "owner": "Jordan Lee",
+          "status": "completed"
+        },
+        {
+          "text": "I will rehearse a fresh install from the lockfiles.",
+          "segment_ordinal": 13,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will validate the setup instructions in a clean directory.",
+          "segment_ordinal": 21,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will test creation with the AI provider disabled.",
+          "segment_ordinal": 29,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will add cookie expiry and storage notes to the runbook.",
+          "segment_ordinal": 37,
+          "owner": "Jordan Lee",
+          "status": "open"
+        }
+      ],
+      "points": [
+        {
+          "kind": "decision",
+          "text": "Use narrow frontend route handlers that inject trusted service headers.",
+          "segment_ordinal": 4
+        },
+        {
+          "kind": "key_point",
+          "text": "The browser should only communicate with the same-origin frontend.",
+          "segment_ordinal": 0
+        },
+        {
+          "kind": "decision",
+          "text": "Run Alembic migrations before the server accepts requests.",
+          "segment_ordinal": 12
+        },
+        {
+          "kind": "key_point",
+          "text": "Schema changes need a reproducible history.",
+          "segment_ordinal": 8
+        },
+        {
+          "kind": "decision",
+          "text": "Provide empty example files and commands for generating separate secrets.",
+          "segment_ordinal": 20
+        },
+        {
+          "kind": "key_point",
+          "text": "A new developer needs explicit environment variable instructions.",
+          "segment_ordinal": 16
+        },
+        {
+          "kind": "decision",
+          "text": "Keep optional provider generation outside the creation transaction.",
+          "segment_ordinal": 28
+        },
+        {
+          "kind": "key_point",
+          "text": "A provider outage must not prevent ordinary meeting editing.",
+          "segment_ordinal": 24
+        },
+        {
+          "kind": "decision",
+          "text": "Explain the limitation without silently resetting existing records.",
+          "segment_ordinal": 36
+        },
+        {
+          "kind": "key_point",
+          "text": "Cookie expiry creates a new anonymous workspace.",
+          "segment_ordinal": 32
+        }
+      ],
+      "overview": "Use narrow frontend route handlers that inject trusted service headers. Run Alembic migrations before the server accepts requests. Provide empty example files and commands for generating separate secrets."
+    },
+    {
+      "title": "Incident review · Delayed import queue",
+      "occurred_at": "2026-09-30T16:00:00+00:00",
+      "duration_ms": 1400000,
+      "tag": "Engineering",
+      "participants": [
+        {
+          "display_name": "Maya Chen",
+          "email": "maya.chen@example.com"
+        },
+        {
+          "display_name": "Jordan Lee",
+          "email": "jordan.lee@example.com"
+        },
+        {
+          "display_name": "Priya Shah",
+          "email": "priya.shah@example.com"
+        },
+        {
+          "display_name": "Alex Rivera",
+          "email": "alex.rivera@example.com"
+        }
+      ],
+      "segments": [
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 0,
+          "end_ms": 28000,
+          "text": "Let’s discuss incident context. A synthetic import demonstration stalled during a burst of large files."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 35000,
+          "end_ms": 63000,
+          "text": "The interface kept displaying a spinner after the request deadline."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 70000,
+          "end_ms": 98000,
+          "text": "The question is how this affects someone reviewing incident review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 105000,
+          "end_ms": 133000,
+          "text": "I agree with the concern. A synthetic import demonstration stalled during a burst of large files. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 140000,
+          "end_ms": 168000,
+          "text": "We decided: Show a controlled unavailable state and retain the import draft."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 175000,
+          "end_ms": 203000,
+          "text": "I will add a deadline failure test to the import workflow. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 210000,
+          "end_ms": 238000,
+          "text": "For verification, start with the case we described: The interface kept displaying a spinner after the request deadline. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 245000,
+          "end_ms": 273000,
+          "text": "That resolves the discussion of incident context. The agreed outcome is: Show a controlled unavailable state and retain the import draft."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 280000,
+          "end_ms": 308000,
+          "text": "Let’s discuss contributing factor. The input handler read the whole body before checking its size."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 309000,
+          "end_ms": 337000,
+          "text": "A request without Content-Length bypassed the early limit."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 350000,
+          "end_ms": 378000,
+          "text": "The question is how this affects someone reviewing incident review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 385000,
+          "end_ms": 413000,
+          "text": "I agree with the concern. The input handler read the whole body before checking its size. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 420000,
+          "end_ms": 448000,
+          "text": "We decided: Enforce the byte budget while consuming incoming chunks."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 455000,
+          "end_ms": 483000,
+          "text": "I will test oversized requests without Content-Length. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 490000,
+          "end_ms": 518000,
+          "text": "For verification, start with the case we described: A request without Content-Length bypassed the early limit. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 525000,
+          "end_ms": 553000,
+          "text": "That resolves the discussion of contributing factor. The agreed outcome is: Enforce the byte budget while consuming incoming chunks."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 560000,
+          "end_ms": 588000,
+          "text": "Let’s discuss retry behavior. A user retried after the first response was lost."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 602000,
+          "end_ms": 630000,
+          "text": "Two meetings were created from the same intended action."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 630000,
+          "end_ms": 658000,
+          "text": "The question is how this affects someone reviewing incident review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 665000,
+          "end_ms": 693000,
+          "text": "I agree with the concern. A user retried after the first response was lost. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 700000,
+          "end_ms": 728000,
+          "text": "We decided: Persist a scoped idempotency key and compare the request hash."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 735000,
+          "end_ms": 763000,
+          "text": "I will add a replay test for identical and changed payloads. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 770000,
+          "end_ms": 798000,
+          "text": "For verification, start with the case we described: Two meetings were created from the same intended action. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 805000,
+          "end_ms": 833000,
+          "text": "That resolves the discussion of retry behavior. The agreed outcome is: Persist a scoped idempotency key and compare the request hash."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 840000,
+          "end_ms": 868000,
+          "text": "Let’s discuss recovery. The restored database must include committed WAL changes."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 875000,
+          "end_ms": 903000,
+          "text": "Copying only the live database file can omit recent writes."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 910000,
+          "end_ms": 938000,
+          "text": "The question is how this affects someone reviewing incident review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 945000,
+          "end_ms": 973000,
+          "text": "I agree with the concern. The restored database must include committed WAL changes. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 980000,
+          "end_ms": 1008000,
+          "text": "We decided: Use SQLite’s online backup API and validate the restored copy."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1015000,
+          "end_ms": 1043000,
+          "text": "I will perform a backup while an unrelated read remains active. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1050000,
+          "end_ms": 1078000,
+          "text": "For verification, start with the case we described: Copying only the live database file can omit recent writes. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1085000,
+          "end_ms": 1113000,
+          "text": "That resolves the discussion of recovery. The agreed outcome is: Use SQLite’s online backup API and validate the restored copy."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1120000,
+          "end_ms": 1148000,
+          "text": "Let’s discuss prevention. Operational limits need to be observable without exposing meeting content."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1155000,
+          "end_ms": 1183000,
+          "text": "Raw request logging would leak transcripts and questions."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1190000,
+          "end_ms": 1218000,
+          "text": "The question is how this affects someone reviewing incident review. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1225000,
+          "end_ms": 1253000,
+          "text": "I agree with the concern. Operational limits need to be observable without exposing meeting content. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1260000,
+          "end_ms": 1288000,
+          "text": "We decided: Log request IDs, status, route, and latency only."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1295000,
+          "end_ms": 1323000,
+          "text": "I will review the logs for content and secret leakage. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1330000,
+          "end_ms": 1358000,
+          "text": "For verification, start with the case we described: Raw request logging would leak transcripts and questions. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1365000,
+          "end_ms": 1393000,
+          "text": "That resolves the discussion of prevention. The agreed outcome is: Log request IDs, status, route, and latency only."
+        }
+      ],
+      "chapters": [
+        {
+          "title": "Incident context",
+          "description": "A synthetic import demonstration stalled during a burst of large files.",
+          "start_ms": 0,
+          "end_ms": 280000,
+          "position": 0
+        },
+        {
+          "title": "Contributing factor",
+          "description": "The input handler read the whole body before checking its size.",
+          "start_ms": 280000,
+          "end_ms": 560000,
+          "position": 1
+        },
+        {
+          "title": "Retry behavior",
+          "description": "A user retried after the first response was lost.",
+          "start_ms": 560000,
+          "end_ms": 840000,
+          "position": 2
+        },
+        {
+          "title": "Recovery",
+          "description": "The restored database must include committed WAL changes.",
+          "start_ms": 840000,
+          "end_ms": 1120000,
+          "position": 3
+        },
+        {
+          "title": "Prevention",
+          "description": "Operational limits need to be observable without exposing meeting content.",
+          "start_ms": 1120000,
+          "end_ms": 1400000,
+          "position": 4
+        }
+      ],
+      "tasks": [
+        {
+          "text": "I will add a deadline failure test to the import workflow.",
+          "segment_ordinal": 5,
+          "owner": "Jordan Lee",
+          "status": "completed"
+        },
+        {
+          "text": "I will test oversized requests without Content-Length.",
+          "segment_ordinal": 13,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will add a replay test for identical and changed payloads.",
+          "segment_ordinal": 21,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will perform a backup while an unrelated read remains active.",
+          "segment_ordinal": 29,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will review the logs for content and secret leakage.",
+          "segment_ordinal": 37,
+          "owner": "Jordan Lee",
+          "status": "open"
+        }
+      ],
+      "points": [
+        {
+          "kind": "decision",
+          "text": "Show a controlled unavailable state and retain the import draft.",
+          "segment_ordinal": 4
+        },
+        {
+          "kind": "key_point",
+          "text": "A synthetic import demonstration stalled during a burst of large files.",
+          "segment_ordinal": 0
+        },
+        {
+          "kind": "decision",
+          "text": "Enforce the byte budget while consuming incoming chunks.",
+          "segment_ordinal": 12
+        },
+        {
+          "kind": "key_point",
+          "text": "The input handler read the whole body before checking its size.",
+          "segment_ordinal": 8
+        },
+        {
+          "kind": "decision",
+          "text": "Persist a scoped idempotency key and compare the request hash.",
+          "segment_ordinal": 20
+        },
+        {
+          "kind": "key_point",
+          "text": "A user retried after the first response was lost.",
+          "segment_ordinal": 16
+        },
+        {
+          "kind": "decision",
+          "text": "Use SQLite’s online backup API and validate the restored copy.",
+          "segment_ordinal": 28
+        },
+        {
+          "kind": "key_point",
+          "text": "The restored database must include committed WAL changes.",
+          "segment_ordinal": 24
+        },
+        {
+          "kind": "decision",
+          "text": "Log request IDs, status, route, and latency only.",
+          "segment_ordinal": 36
+        },
+        {
+          "kind": "key_point",
+          "text": "Operational limits need to be observable without exposing meeting content.",
+          "segment_ordinal": 32
+        }
+      ],
+      "overview": "Show a controlled unavailable state and retain the import draft. Enforce the byte budget while consuming incoming chunks. Persist a scoped idempotency key and compare the request hash."
+    },
+    {
+      "title": "Hiring debrief · Synthetic exercise",
+      "occurred_at": "2026-09-29T08:00:00+00:00",
+      "duration_ms": 1400000,
+      "tag": "People",
+      "participants": [
+        {
+          "display_name": "Maya Chen",
+          "email": "maya.chen@example.com"
+        },
+        {
+          "display_name": "Jordan Lee",
+          "email": "jordan.lee@example.com"
+        },
+        {
+          "display_name": "Priya Shah",
+          "email": "priya.shah@example.com"
+        },
+        {
+          "display_name": "Alex Rivera",
+          "email": "alex.rivera@example.com"
+        }
+      ],
+      "segments": [
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 0,
+          "end_ms": 28000,
+          "text": "Let’s discuss exercise context. This meeting reviews a fictional practice exercise with invented participants."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 35000,
+          "end_ms": 63000,
+          "text": "It does not describe or evaluate a real applicant."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 70000,
+          "end_ms": 98000,
+          "text": "The question is how this affects someone reviewing hiring debrief. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 105000,
+          "end_ms": 133000,
+          "text": "I agree with the concern. This meeting reviews a fictional practice exercise with invented participants. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 140000,
+          "end_ms": 168000,
+          "text": "We decided: Keep all assessment examples synthetic and job-related."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 175000,
+          "end_ms": 203000,
+          "text": "I will label the exercise context in the sample meeting. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 210000,
+          "end_ms": 238000,
+          "text": "For verification, start with the case we described: It does not describe or evaluate a real applicant. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 245000,
+          "end_ms": 273000,
+          "text": "That resolves the discussion of exercise context. The agreed outcome is: Keep all assessment examples synthetic and job-related."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 280000,
+          "end_ms": 308000,
+          "text": "Let’s discuss technical discussion. The exercise asked for a readable full-stack meeting application."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 309000,
+          "end_ms": 337000,
+          "text": "The explanation should connect the API boundary to storage ownership."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 350000,
+          "end_ms": 378000,
+          "text": "The question is how this affects someone reviewing hiring debrief. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 385000,
+          "end_ms": 413000,
+          "text": "I agree with the concern. The exercise asked for a readable full-stack meeting application. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 420000,
+          "end_ms": 448000,
+          "text": "We decided: Ask for a code walkthrough using a concrete request example."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 455000,
+          "end_ms": 483000,
+          "text": "I will prepare a meeting creation walkthrough. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 490000,
+          "end_ms": 518000,
+          "text": "For verification, start with the case we described: The explanation should connect the API boundary to storage ownership. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 525000,
+          "end_ms": 553000,
+          "text": "That resolves the discussion of technical discussion. The agreed outcome is: Ask for a code walkthrough using a concrete request example."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 560000,
+          "end_ms": 588000,
+          "text": "Let’s discuss testing discussion. A passing happy-path test does not demonstrate workspace isolation."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 602000,
+          "end_ms": 630000,
+          "text": "A second session should fail when it substitutes a foreign record ID."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 630000,
+          "end_ms": 658000,
+          "text": "The question is how this affects someone reviewing hiring debrief. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 665000,
+          "end_ms": 693000,
+          "text": "I agree with the concern. A passing happy-path test does not demonstrate workspace isolation. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 700000,
+          "end_ms": 728000,
+          "text": "We decided: Include adversarial scoped-resource examples in the walkthrough."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 735000,
+          "end_ms": 763000,
+          "text": "I will prepare a two-session isolation demonstration. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 770000,
+          "end_ms": 798000,
+          "text": "For verification, start with the case we described: A second session should fail when it substitutes a foreign record ID. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 805000,
+          "end_ms": 833000,
+          "text": "That resolves the discussion of testing discussion. The agreed outcome is: Include adversarial scoped-resource examples in the walkthrough."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 840000,
+          "end_ms": 868000,
+          "text": "Let’s discuss tradeoff discussion. SQLite is suitable for the assignment’s single-instance boundary."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 875000,
+          "end_ms": 903000,
+          "text": "It should not be presented as unrestricted horizontal write scaling."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 910000,
+          "end_ms": 938000,
+          "text": "The question is how this affects someone reviewing hiring debrief. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 945000,
+          "end_ms": 973000,
+          "text": "I agree with the concern. SQLite is suitable for the assignment’s single-instance boundary. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 980000,
+          "end_ms": 1008000,
+          "text": "We decided: Document the storage boundary and a future migration path."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1015000,
+          "end_ms": 1043000,
+          "text": "I will review the database tradeoff explanation. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1050000,
+          "end_ms": 1078000,
+          "text": "For verification, start with the case we described: It should not be presented as unrestricted horizontal write scaling. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1085000,
+          "end_ms": 1113000,
+          "text": "That resolves the discussion of tradeoff discussion. The agreed outcome is: Document the storage boundary and a future migration path."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1120000,
+          "end_ms": 1148000,
+          "text": "Let’s discuss follow-through. The final handoff should distinguish verified behavior from configuration."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1155000,
+          "end_ms": 1183000,
+          "text": "A deployment file alone is not proof that records survive redeployment."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1190000,
+          "end_ms": 1218000,
+          "text": "The question is how this affects someone reviewing hiring debrief. We should keep the original evidence visible."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1225000,
+          "end_ms": 1253000,
+          "text": "I agree with the concern. The final handoff should distinguish verified behavior from configuration. We need a specific behavior that we can verify."
+        },
+        {
+          "speaker": "Maya Chen",
+          "start_ms": 1260000,
+          "end_ms": 1288000,
+          "text": "We decided: Require a live persistence check before claiming a hosted result."
+        },
+        {
+          "speaker": "Jordan Lee",
+          "start_ms": 1295000,
+          "end_ms": 1323000,
+          "text": "I will prepare the create-restart-revisit evaluation checklist. I will bring back the result for review."
+        },
+        {
+          "speaker": "Priya Shah",
+          "start_ms": 1330000,
+          "end_ms": 1358000,
+          "text": "For verification, start with the case we described: A deployment file alone is not proof that records survive redeployment. Check the expected behavior after refreshing."
+        },
+        {
+          "speaker": "Alex Rivera",
+          "start_ms": 1365000,
+          "end_ms": 1393000,
+          "text": "That resolves the discussion of follow-through. The agreed outcome is: Require a live persistence check before claiming a hosted result."
+        }
+      ],
+      "chapters": [
+        {
+          "title": "Exercise context",
+          "description": "This meeting reviews a fictional practice exercise with invented participants.",
+          "start_ms": 0,
+          "end_ms": 280000,
+          "position": 0
+        },
+        {
+          "title": "Technical discussion",
+          "description": "The exercise asked for a readable full-stack meeting application.",
+          "start_ms": 280000,
+          "end_ms": 560000,
+          "position": 1
+        },
+        {
+          "title": "Testing discussion",
+          "description": "A passing happy-path test does not demonstrate workspace isolation.",
+          "start_ms": 560000,
+          "end_ms": 840000,
+          "position": 2
+        },
+        {
+          "title": "Tradeoff discussion",
+          "description": "SQLite is suitable for the assignment’s single-instance boundary.",
+          "start_ms": 840000,
+          "end_ms": 1120000,
+          "position": 3
+        },
+        {
+          "title": "Follow-through",
+          "description": "The final handoff should distinguish verified behavior from configuration.",
+          "start_ms": 1120000,
+          "end_ms": 1400000,
+          "position": 4
+        }
+      ],
+      "tasks": [
+        {
+          "text": "I will label the exercise context in the sample meeting.",
+          "segment_ordinal": 5,
+          "owner": "Jordan Lee",
+          "status": "completed"
+        },
+        {
+          "text": "I will prepare a meeting creation walkthrough.",
+          "segment_ordinal": 13,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will prepare a two-session isolation demonstration.",
+          "segment_ordinal": 21,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will review the database tradeoff explanation.",
+          "segment_ordinal": 29,
+          "owner": "Jordan Lee",
+          "status": "open"
+        },
+        {
+          "text": "I will prepare the create-restart-revisit evaluation checklist.",
+          "segment_ordinal": 37,
+          "owner": "Jordan Lee",
+          "status": "open"
+        }
+      ],
+      "points": [
+        {
+          "kind": "decision",
+          "text": "Keep all assessment examples synthetic and job-related.",
+          "segment_ordinal": 4
+        },
+        {
+          "kind": "key_point",
+          "text": "This meeting reviews a fictional practice exercise with invented participants.",
+          "segment_ordinal": 0
+        },
+        {
+          "kind": "decision",
+          "text": "Ask for a code walkthrough using a concrete request example.",
+          "segment_ordinal": 12
+        },
+        {
+          "kind": "key_point",
+          "text": "The exercise asked for a readable full-stack meeting application.",
+          "segment_ordinal": 8
+        },
+        {
+          "kind": "decision",
+          "text": "Include adversarial scoped-resource examples in the walkthrough.",
+          "segment_ordinal": 20
+        },
+        {
+          "kind": "key_point",
+          "text": "A passing happy-path test does not demonstrate workspace isolation.",
+          "segment_ordinal": 16
+        },
+        {
+          "kind": "decision",
+          "text": "Document the storage boundary and a future migration path.",
+          "segment_ordinal": 28
+        },
+        {
+          "kind": "key_point",
+          "text": "SQLite is suitable for the assignment’s single-instance boundary.",
+          "segment_ordinal": 24
+        },
+        {
+          "kind": "decision",
+          "text": "Require a live persistence check before claiming a hosted result.",
+          "segment_ordinal": 36
+        },
+        {
+          "kind": "key_point",
+          "text": "The final handoff should distinguish verified behavior from configuration.",
+          "segment_ordinal": 32
+        }
+      ],
+      "overview": "Keep all assessment examples synthetic and job-related. Ask for a code walkthrough using a concrete request example. Include adversarial scoped-resource examples in the walkthrough."
+    }
+  ]
+}
