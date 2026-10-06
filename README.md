@@ -49,7 +49,7 @@ npm run test:e2e
 
 Docker Compose uses a named volume for the database. Set the environment files before running `docker compose up --build`. See the [deployment and operations guide](docs/deployment.md) for Render, Vercel, persistence checks, and current verification limits.
 
-AI is disabled by default. No public repository or hosted application has been verified yet.
+AI is disabled by default. Extractive mode works immediately; OpenAI requires backend configuration and explicit user consent. No live provider request has been verified.
 
 Database schema, seed behavior, backup and restore: [database guide](docs/database.md).
 
@@ -73,3 +73,20 @@ Comments, Unicode range highlights, and named soundbites persist in SQLite. Glob
 Read the [evaluation walkthrough](docs/evaluation.md), [architecture](docs/architecture.md), [API](docs/api.md), [import formats](docs/imports.md), [intelligence and exports](docs/intelligence.md), [design references](docs/design.md), and [security review](docs/security.md).
 
 From the repository root, run `node scripts/audit_npm.mjs`, `backend/.venv/bin/pip-audit`, `python3 scripts/scan_secrets.py`, and `python3 scripts/check_client_secrets.py` after building. The npm gate retains one documented unpatched development-only glob advisory; runtime findings fail the check. GitHub Actions is configured to run the checks and browser suite without live AI credentials.
+
+
+## Verification and publication status
+
+Checked locally on October 6, 2026: **79 backend tests, 10 frontend unit tests, and 9 browser workflows passed**, along with lint, formatting, strict type checks, migration drift checks, and the production build. The same saved meeting, manual task, transcript, and notes survived backend restart. A clean locked Python production install/import and PDF rendering/extraction checks passed. Tested library/notebook views had no serious/critical axe findings.
+
+| Deliverable | Status |
+| --- | --- |
+| Local application | Available at [localhost:3000](http://localhost:3000) while both servers run |
+| Public repository URL | Pending GitHub target and authenticated publication access |
+| Hosted application URL | Pending authorized Vercel/Render projects and a paid persistent Render service |
+| Hosted restart/BFF verification | Pending deployment; local restart and BFF workflows passed |
+| Container execution | Compose and Render schema validate; Docker engine startup must be completed before local image execution can be verified |
+| Live OpenAI | Not configured or verified; adapter tested with deterministic provider mocks |
+| GitHub Actions | Configured; remote run awaits repository publication |
+
+No public URL, CI badge, hosted persistence result, or live-AI success is claimed. The project is ready for those external verification steps; it is not yet a fully published submission. Follow [deployment.md](docs/deployment.md) for exact configuration, container checks, backup/restore, secret rotation, and live acceptance procedures.
