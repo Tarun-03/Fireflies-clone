@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: ./backend
+    env_file: ./backend/.env
+    environment:
+      DATABASE_URL: sqlite:////var/data/meeting-workspace.db
+    volumes:
+      - meeting-data:/var/data
+    ports:
+      - "127.0.0.1:8000:8000"
+  frontend:
+    build: ./frontend
+    env_file: ./frontend/.env.local
+    environment:
+      BACKEND_URL: http://backend:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+volumes:
+  meeting-data:

@@ -1,0 +1,53 @@
+{
+  "name": "meeting-workspace-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "contracts": "openapi-typescript ../docs/openapi.json -o lib/contracts.d.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "5.3.0",
+    "@hookform/resolvers": "5.9.1",
+    "@radix-ui/react-alert-dialog": "1.1.24",
+    "@radix-ui/react-dialog": "1.2.0",
+    "@radix-ui/react-dropdown-menu": "2.1.25",
+    "@tanstack/react-query": "5.104.1",
+    "lucide-react": "1.52.0",
+    "next": "16.3.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-hook-form": "7.89.0",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@eslint/compat": "2.1.1",
+    "@playwright/test": "1.63.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@types/node": "26.6.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "10.12.0",
+    "eslint-config-next": "16.3.8",
+    "jsdom": "29.1.1",
+    "openapi-typescript": "7.13.0",
+    "prettier": "3.9.9",
+    "tailwindcss": "4.3.3",
+    "typescript": "5.9.3",
+    "vitest": "5.0.3"
+  }
+}

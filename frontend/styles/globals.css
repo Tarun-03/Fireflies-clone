@@ -1,0 +1,65 @@
+@import "tailwindcss";
+:root {
+  --background: #fafafc;
+  --surface: #fff;
+  --surface-muted: #f3f4f6;
+  --text: #202124;
+  --text-muted: #626673;
+  --border: #e7e8ee;
+  --accent: #6c4ee3;
+  --accent-hover: #5937ce;
+  --accent-soft: #f0eaff;
+  --danger: #b42318;
+  --focus: #6545d6;
+  --search: #fff0a8;
+  --active-line: #f0eaff;
+}
+[data-theme="dark"] {
+  --background: #15141a;
+  --surface: #1e1d25;
+  --surface-muted: #272630;
+  --text: #f1eff7;
+  --text-muted: #b4b0c1;
+  --border: #3a3747;
+  --accent: #b6a3ff;
+  --accent-hover: #d0c4ff;
+  --accent-soft: #332950;
+  --danger: #ff9898;
+  --focus: #c7b7ff;
+  --search: #665014;
+  --active-line: #332950;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
+  font:
+    14px/1.5 "Inter Variable",
+    system-ui,
+    sans-serif;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+.welcome {
+  padding: 48px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

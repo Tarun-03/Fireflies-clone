@@ -1,0 +1,13 @@
+# Interface references
+
+References accessed October 6, 2026:
+
+- https://guide.fireflies.ai/articles/4827382971-learn-about-fireflies-notebook
+- https://guide.fireflies.ai/articles/6653885315-learn-about-the-fireflies-notepad
+- https://guide.fireflies.ai/articles/4577578901-how-to-search-and-find-your-meetings
+
+The public guides describe a left navigation, local and global search, filters, and meeting rows. The notebook guide specifies notes on the left and transcript on the right. The notebook two-panel image was inspected in its browser image preview after the initial navigation timeout. It shows a narrow tools rail, two white text panels with slim borders, speaker-colored transcript labels, a compact title, and playback controls along the bottom. The library and search image previews have not yet been visually verified.
+
+The original interface uses a 232px sidebar, a 4px spacing grid, thin borders, compact metadata, and a restrained purple accent. The notebook follows the documented two-panel hierarchy, with a persistent player. Tags replace commercial collaboration channels. Sample playback and extractive intelligence are labelled explicitly. Inter is bundled locally under the SIL Open Font License via @fontsource-variable/inter; no remote font or avatar requests are necessary.
+
+Semantic light and dark tokens live in frontend/styles/globals.css. Keyboard focus uses a contrasting outline. Mobile layouts prioritize transcript readability and preserve player state.
