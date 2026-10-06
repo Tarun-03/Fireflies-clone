@@ -11,3 +11,7 @@ The public guides describe a left navigation, local and global search, filters, 
 The original interface uses a 232px sidebar, a 4px spacing grid, thin borders, compact metadata, and a restrained purple accent. The notebook follows the documented two-panel hierarchy, with a persistent player. Tags replace commercial collaboration channels. Sample playback and extractive intelligence are labelled explicitly. Inter is bundled locally under the SIL Open Font License via @fontsource-variable/inter; no remote font or avatar requests are necessary.
 
 Semantic light and dark tokens live in frontend/styles/globals.css. Keyboard focus uses a contrasting outline. Mobile layouts prioritize transcript readability and preserve player state.
+
+## Verified interface
+
+The library was reviewed at 390, 768, 1024, and 1440 pixels in light and dark themes. Playwright verified no horizontal overflow, filter restoration after refresh, notification read persistence, and theme persistence. Axe found no serious or critical findings across these eight library views after correcting the mobile create-button label. Screenshots are stored in `docs/screenshots/`.

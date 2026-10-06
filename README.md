@@ -49,3 +49,11 @@ Docker Compose uses a named volume for the database. Set the environment files b
 AI is disabled by default. No public repository or hosted application has been verified yet.
 
 Database schema, seed behavior, backup and restore: [database guide](docs/database.md).
+
+## Meeting library
+
+The library supports title, attendee, tag, date, and duration filters; recent/oldest/title ordering; cursor pagination; and URL restoration. Tags, notifications, action-item completion, and theme/timezone/player preferences persist through the API.
+
+![Meeting library](docs/screenshots/library-light-1440.png)
+
+Run frontend unit tests with `npm test` and browser checks with `npm run test:e2e`. Browser checks use installed Google Chrome locally; CI uses Playwright Chromium. Both services must be running with `APP_ORIGIN=http://localhost:3000`.
