@@ -8,6 +8,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { api, bootstrap } from "@/lib/api";
+import type { Page } from "@/lib/types";
 
 const Ready = createContext(false);
 const Toast = createContext<(message: string) => void>(() => {});
@@ -90,6 +91,28 @@ export function useAction() {
     onSuccess: async ({ message }) => {
       await client.invalidateQueries({ queryKey: ["api"] });
       if (message) notify(message);
+    },
+  });
+}
+
+export function useAllPages<T>(path: string) {
+  const ready = useContext(Ready);
+  return useQuery({
+    queryKey: ["api", path, "options"],
+    enabled: ready,
+    queryFn: async ({ signal }) => {
+      const items: T[] = [];
+      let cursor: string | null = null;
+      for (let page = 0; page < 5; page++) {
+        const result: Page<T> = await api<Page<T>>(
+          `${path}?limit=100${cursor ? `&cursor=${cursor}` : ""}`,
+          { signal },
+        );
+        items.push(...result.items);
+        cursor = result.next_cursor ?? null;
+        if (!cursor) return { ...result, items };
+      }
+      throw new Error("Too many options. Narrow the workspace participants.");
     },
   });
 }

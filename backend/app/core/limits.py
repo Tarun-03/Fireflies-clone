@@ -4,7 +4,7 @@ import time
 from collections import deque
 from pathlib import Path
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
@@ -29,9 +29,33 @@ def rate_limit(key: str, category: str, limit: int, seconds: int = 60) -> None:
         bucket.append(now)
 
 
+def ensure_free_space(added_bytes: int = 3 * 1024 * 1024) -> None:
+    config = get_settings()
+    database = Path(config.database_url.removeprefix("sqlite:///"))
+    if (
+        shutil.disk_usage(database.resolve().parent).free
+        < config.disk_reserve_bytes + added_bytes * 4
+    ):
+        raise DomainError(503, "storage_unavailable", "Storage is temporarily unavailable.")
+
+
+def check_database_budget(db: Session) -> None:
+    pages = int(db.scalar(text("PRAGMA page_count")) or 0)
+    free = int(db.scalar(text("PRAGMA freelist_count")) or 0)
+    size = int(db.scalar(text("PRAGMA page_size")) or 4096)
+    if (pages - free) * size >= get_settings().global_text_bytes:
+        raise DomainError(
+            429,
+            "storage_quota",
+            "The demonstration storage limit has been reached. Remove unused c"
+            "ontent or contact the operator.",
+        )
+
+
 def check_storage(
     db: Session, workspace_id: str | None = None, added_bytes: int = 0, added_segments: int = 0
 ) -> None:
+    check_database_budget(db)
     config = get_settings()
     database = Path(config.database_url.removeprefix("sqlite:///"))
     if (

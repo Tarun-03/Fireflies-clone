@@ -60,7 +60,7 @@ export function requireCsrf(request: NextRequest, session: Session) {
     );
 }
 export async function boundedBody(
-  request: Request,
+  request: Request | Response,
   maximum = 3 * 1024 * 1024,
 ): Promise<Uint8Array> {
   const reader = request.body?.getReader();

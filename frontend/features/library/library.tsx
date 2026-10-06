@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { ErrorNotice } from "@/components/dialog";
-import { useApi } from "@/components/providers";
+import { useApi, useAllPages } from "@/components/providers";
 import { dateBoundary, dateLabel, timeLabel } from "@/lib/time";
 import type { Meeting, Page, Participant, Profile, Tag } from "@/lib/types";
 import { MeetingMenu } from "./meeting-menu";
@@ -21,7 +21,7 @@ export function Library({ uploads = false }: { uploads?: boolean }) {
   const params = useSearchParams();
   const router = useRouter();
   const profile = useApi<Profile>("me");
-  const people = useApi<Page<Participant>>("participants");
+  const people = useAllPages<Participant>("participants");
   const tags = useApi<Page<Tag>>("tags");
   const timezone = profile.data?.preferences.timezone ?? "Asia/Kolkata";
   const query = new URLSearchParams(params.toString());

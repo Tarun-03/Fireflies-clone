@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.db.engine import engine
 from app.db.session import begin_write
+from app.services.maintenance import prune_expired
 from app.services.seed import bootstrap
 
 
@@ -32,11 +33,23 @@ def backup(source: Path, destination: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=["backup", "restore", "rebuild-search", "seed"])
+    parser.add_argument("command", choices=["backup", "restore", "rebuild-search", "seed", "prune"])
     parser.add_argument("--destination", type=Path)
     parser.add_argument("--source", type=Path)
     parser.add_argument("--session", type=UUID)
+    parser.add_argument("--apply", action="store_true", help="Apply cleanup; otherwise dry-run")
+    parser.add_argument(
+        "--expired-workspaces", action="store_true", help="Also remove expired demo workspaces"
+    )
+    parser.add_argument(
+        "--retention-days",
+        type=int,
+        default=7,
+        help="Keep expired workspace content for this many additional days",
+    )
     args = parser.parse_args()
+    if args.retention_days < 0:
+        parser.error("--retention-days cannot be negative")
     database = Path(get_settings().database_url.removeprefix("sqlite:///"))
     if args.command == "backup":
         if args.destination is None:
@@ -51,6 +64,18 @@ def main() -> None:
             connection.execute(
                 text("INSERT INTO search_documents_fts(search_documents_fts) VALUES('rebuild')")
             )
+    elif args.command == "prune":
+        with Session(engine) as db:
+            begin_write(db)
+            count = prune_expired(
+                db,
+                maximum=500,
+                apply=args.apply,
+                expired_workspaces=args.expired_workspaces,
+                retention_days=args.retention_days,
+            )
+            print(f"Expired workspaces eligible: {count}; apply={args.apply}")
+            db.commit()
     else:
         if args.session is None:
             parser.error("--session UUID is required")

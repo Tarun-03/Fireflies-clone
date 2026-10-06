@@ -1,37 +1,81 @@
 name: Checks
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
-  backend:
+  workspace:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
+    timeout-minutes: 20
     env:
-      INTERNAL_API_TOKEN: ci-test-only-service-token-not-for-deployment
+      INTERNAL_API_TOKEN: ci-only-service-token-with-at-least-32-characters
+      SESSION_SIGNING_SECRET: ci-only-distinct-cookie-signing-secret-with-32-characters
       ENVIRONMENT: test
+      APP_ENV: development
+      APP_ORIGIN: http://localhost:3000
+      BACKEND_URL: http://127.0.0.1:8000
+      LLM_PROVIDER: disabled
+      NEXT_TELEMETRY_DISABLED: '1'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13.5'
-      - uses: astral-sh/setup-uv@v6
-        with:
-          version: '0.12.23'
-      - run: uv sync --frozen
-      - run: uv run ruff check . && uv run ruff format --check .
-      - run: uv run mypy app
-      - run: uv run pytest
-  frontend:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '24.5.0'
           cache: npm
           cache-dependency-path: frontend/package-lock.json
-      - run: npm ci
-      - run: npm run lint && npm run typecheck && npm run build
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.12.23'
+      - name: Install locked dependencies
+        run: |
+          uv sync --frozen --project backend
+          npm ci --prefix frontend
+      - name: Backend checks and migration tests
+        working-directory: backend
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run mypy app
+          uv run pytest
+          uv run alembic upgrade head
+          uv run alembic check
+          uv run python -m scripts.openapi
+      - name: Frontend checks and generated contract drift
+        working-directory: frontend
+        run: |
+          npm run contracts
+          git diff --exit-code -- ../docs/openapi.json lib/contracts.d.ts
+          npm run format:check
+          npm run lint
+          npm run typecheck
+          npm test
+          npm run build
+      - name: Dependency and secret scans
+        run: |
+          node scripts/audit_npm.mjs
+          backend/.venv/bin/pip-audit
+          python scripts/scan_secrets.py
+          python scripts/check_client_secrets.py
+      - name: Browser and accessibility workflows
+        run: |
+          cd frontend
+          npx playwright install --with-deps chromium
+          cd ../backend
+          uv run uvicorn app.main:app --host 127.0.0.1 --port 8000 --no-access-log > /tmp/backend.log 2>&1 &
+          cd ../frontend
+          npm run start -- --hostname 127.0.0.1 > /tmp/frontend.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8000/health/ready && curl -fsS http://localhost:3000/ >/dev/null; then break; fi
+            sleep 1
+          done
+          npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-failure-traces
+          path: frontend/test-results
+          retention-days: 7

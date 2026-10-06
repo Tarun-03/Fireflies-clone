@@ -58,6 +58,13 @@ class MeetingUpdate(StrictModel):
     duration_ms: int | None = Field(None, ge=1000, le=21600000)
     description: str | None = Field(None, max_length=4000)
 
+    @model_validator(mode="after")
+    def supplied_values(self) -> "MeetingUpdate":
+        for field in ("title", "occurred_at", "duration_ms"):
+            if field in self.model_fields_set and getattr(self, field) is None:
+                raise ValueError(f"{field} cannot be null")
+        return self
+
 
 class Meeting(PublicModel):
     id: UUID
@@ -109,6 +116,13 @@ class TaskUpdate(StrictModel):
     assignee_participant_id: UUID | None = None
     due_date: date | None = None
     status: Literal["open", "completed"] | None = None
+
+    @model_validator(mode="after")
+    def supplied_values(self) -> "TaskUpdate":
+        for field in ("text", "status"):
+            if field in self.model_fields_set and getattr(self, field) is None:
+                raise ValueError(f"{field} cannot be null")
+        return self
 
 
 class Task(PublicModel):

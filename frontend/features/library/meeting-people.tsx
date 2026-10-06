@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Dialog, ErrorNotice } from "@/components/dialog";
-import { useAction, useApi } from "@/components/providers";
+import { useAction, useApi, useAllPages } from "@/components/providers";
 import type { Meeting, Page, Participant, Tag } from "@/lib/types";
 export function MeetingPeople({
   meeting,
@@ -10,7 +10,7 @@ export function MeetingPeople({
   meeting: Meeting;
   close: () => void;
 }) {
-  const people = useApi<Page<Participant>>("participants");
+  const people = useAllPages<Participant>("participants");
   const tags = useApi<Page<Tag>>("tags");
   const action = useAction();
   const [selected, setSelected] = useState(

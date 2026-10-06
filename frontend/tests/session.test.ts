@@ -52,3 +52,23 @@ describe("session isolation", () => {
     expect(allowedRoute("me", "DELETE")).toBe(false);
   });
 });
+
+describe("bounded streaming bodies", () => {
+  it("rejects a stream that exceeds its allowance without Content-Length", async () => {
+    const { boundedBody } = await import("@/lib/bff");
+    let cancelled = false;
+    const stream = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        controller.enqueue(new Uint8Array(1024));
+      },
+      cancel() {
+        cancelled = true;
+      },
+    });
+    await expect(boundedBody(new Response(stream), 2048)).rejects.toThrow(
+      "too large",
+    );
+    expect(cancelled).toBe(true);
+    expect(await boundedBody(new Response("😀"), 4)).toHaveLength(4);
+  });
+});

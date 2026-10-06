@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
 import { Dialog, ErrorNotice } from "@/components/dialog";
-import { useApi } from "@/components/providers";
+import { useApi, useAllPages } from "@/components/providers";
 import { Marked } from "@/features/notebook/transcript";
 import { dateLabel, timestamp } from "@/lib/time";
 import type { Page, Participant, SearchHit, Tag } from "@/lib/types";
@@ -14,17 +14,25 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
   const [participant, setParticipant] = useState("");
   const [kind, setKind] = useState("");
   const [cursor, setCursor] = useState("");
+  const [after, setAfter] = useState("");
+  const [before, setBefore] = useState("");
   useEffect(() => {
     const timer = setTimeout(() => setDebounced(query), 250);
     return () => clearTimeout(timer);
   }, [query]);
   const tags = useApi<Page<Tag>>("tags");
-  const people = useApi<Page<Participant>>("participants");
+  const people = useAllPages<Participant>("participants");
   const params = new URLSearchParams({ q: debounced });
   if (tag) params.set("tag", tag);
   if (participant) params.set("participant", participant);
   if (kind) params.set("kind", kind);
   if (cursor) params.set("cursor", cursor);
+  if (after) params.set("after", `${after}T00:00:00Z`);
+  if (before)
+    params.set(
+      "before",
+      new Date(Date.parse(`${before}T00:00:00Z`) + 86400000).toISOString(),
+    );
   const result = useApi<Page<SearchHit>>(
     `search?${params}`,
     Boolean(debounced.trim()),
@@ -106,6 +114,30 @@ export function SearchDialog({ onClose }: { onClose: () => void }) {
             </option>
           ))}
         </select>
+      </div>
+      <div className="form-grid">
+        <label>
+          From date (UTC)
+          <input
+            type="date"
+            value={after}
+            onChange={(e) => {
+              setAfter(e.target.value);
+              setCursor("");
+            }}
+          />
+        </label>
+        <label>
+          Through date (UTC)
+          <input
+            type="date"
+            value={before}
+            onChange={(e) => {
+              setBefore(e.target.value);
+              setCursor("");
+            }}
+          />
+        </label>
       </div>
       <ErrorNotice error={result.error} />
       <div className="search-results">

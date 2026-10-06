@@ -8,6 +8,7 @@ from app.api.annotations import stamp
 from app.core.config import get_settings
 from app.schemas.chat import GeneratedAnswer
 from app.schemas.notebook import Segment
+from app.services.provider_guard import cooling_down, record_result
 
 
 def offline(rows: list[Segment]) -> GeneratedAnswer:
@@ -114,11 +115,19 @@ async def answer(
             "extractive",
             "Live AI is not configured. Showing transcript excerpts.",
         )
+    if cooling_down():
+        return (
+            offline(rows),
+            "extractive",
+            "Live AI is cooling down after repeated failures. Showing extractive content.",
+        )
     try:
         async with asyncio.timeout(30):
             result = await provider_answer(question, rows, history, meeting_id, revision)
+        record_result(True)
         return result, "openai", None
     except (APIError, ValueError, ValidationError, TimeoutError):
+        record_result(False)
         return (
             offline(rows),
             "extractive",

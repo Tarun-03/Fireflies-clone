@@ -1,3 +1,6 @@
+import json
+import logging
+import time
 from uuid import uuid4
 
 from fastapi import FastAPI, Request
@@ -62,11 +65,24 @@ app.include_router(tasks.router)
 
 @app.middleware("http")
 async def request_headers(request: Request, call_next: RequestResponseEndpoint) -> Response:
+    started = time.monotonic()
     request.state.request_id = str(uuid4())
     result = await call_next(request)
     result.headers["X-Request-ID"] = request.state.request_id
     result.headers["Cache-Control"] = "no-store"
     result.headers["X-Content-Type-Options"] = "nosniff"
+    route = getattr(request.scope.get("route"), "path", "unmatched")
+    logging.getLogger("uvicorn.error").info(
+        json.dumps(
+            {
+                "request_id": request.state.request_id,
+                "method": request.method,
+                "route": route,
+                "status": result.status_code,
+                "duration_ms": round((time.monotonic() - started) * 1000),
+            }
+        )
+    )
     return result
 
 

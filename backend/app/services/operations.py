@@ -8,9 +8,11 @@ from app.api.dependencies import Scope
 from app.core.errors import DomainError
 from app.db.session import begin_write
 from app.models import idempotency_records
+from app.services.maintenance import expire_key
 
 
 def claim(scope: Scope, endpoint: str, key: str, digest: str) -> str | None:
+    expire_key(scope.db, scope.workspace_id, endpoint, key)
     where = (
         (idempotency_records.c.workspace_id == scope.workspace_id)
         & (idempotency_records.c.endpoint == endpoint)

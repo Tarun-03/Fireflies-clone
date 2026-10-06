@@ -32,6 +32,14 @@ describe("monotonic playback", () => {
       segment: timeline[2],
       gap: false,
     });
+    expect(locate(timeline, 3700)).toEqual({
+      segment: timeline[1],
+      gap: false,
+    });
+    expect(locate(timeline, 4500)).toEqual({
+      segment: timeline[0],
+      gap: false,
+    });
     expect(locate(timeline, 6000)).toEqual({ segment: timeline[2], gap: true });
     const long = Array.from({ length: 3000 }, (_, i) => ({
       public_id: String(i),

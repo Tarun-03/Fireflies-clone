@@ -56,6 +56,18 @@ test("notebook search, seeking, follow, notes, and responsive playback", async (
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     ).toBe(true);
+    expect(
+      await page.evaluate(
+        () =>
+          document.documentElement.scrollHeight <=
+          Math.max(
+            innerHeight,
+            document.querySelector(".app-shell")!.getBoundingClientRect()
+              .height,
+          ) +
+            2,
+      ),
+    ).toBe(true);
     const axe = await new AxeBuilder({ page }).analyze();
     expect(
       axe.violations.filter((v) =>
@@ -64,6 +76,44 @@ test("notebook search, seeking, follow, notes, and responsive playback", async (
     ).toEqual([]);
     await page.screenshot({
       path: `../docs/screenshots/notebook-${width}.png`,
+      fullPage: true,
+    });
+  }
+  const notebookUrl = page.url();
+  await page.goto("/settings");
+  await page
+    .getByRole("combobox", { name: "Theme", exact: true })
+    .selectOption("dark");
+  await page.getByRole("button", { name: "Save preferences" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.goto(notebookUrl);
+  for (const width of [390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 1000 });
+    if (width <= 800)
+      await page.getByRole("tab", { name: "Transcript", exact: true }).click();
+    await expect(
+      page.getByRole("slider", { name: "Seek meeting" }),
+    ).toBeVisible();
+    expect(
+      await page.evaluate(
+        () =>
+          document.documentElement.scrollHeight <=
+          Math.max(
+            innerHeight,
+            document.querySelector(".app-shell")!.getBoundingClientRect()
+              .height,
+          ) +
+            2,
+      ),
+    ).toBe(true);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(
+      axe.violations.filter((v) =>
+        ["serious", "critical"].includes(v.impact ?? ""),
+      ),
+    ).toEqual([]);
+    await page.screenshot({
+      path: `../docs/screenshots/notebook-dark-${width}.png`,
       fullPage: true,
     });
   }

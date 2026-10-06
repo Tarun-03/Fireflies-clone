@@ -8,10 +8,21 @@ Browser calls go through `/api/v1/` on the frontend. Its route allowlist injects
 
 `GET /api/session/csrf` checks same-origin fetch metadata, issues a signed ten-minute nonce cookie for a new visitor, and returns a CSRF token. It creates no workspace. `POST /api/session`, with exact Origin, JSON `{}`, and `X-CSRF-Token`, verifies the nonce or existing session and calls the internal session endpoint. It sets a signed thirty-day HttpOnly cookie and returns the session-bound mutation token. Production requires HTTPS and host-only `__Host-` cookies. Responses use no-store caching.
 
-Business mutations require `X-CSRF-Token`; updates/deletes also require `If-Match` containing the resource version. Meeting creation requires an `Idempotency-Key` of 16–100 characters. Reusing a key with different content fails with 409. Keep drafts on conflicts and reload the current version before retrying.
+Business mutations require `X-CSRF-Token`; updates/deletes also require `If-Match` containing the resource version. Creation requires an `Idempotency-Key` of 16–100 characters; import, regeneration, and chat require a UUID key. The browser uses UUID keys for all four. Reusing a key with different content fails with 409. Keep drafts on conflicts and reload the current version before retrying.
 
-Meeting lists use a bounded page size and a filter-bound keyset cursor. Supported sort values are recent, oldest, and title. `after` is inclusive UTC; `before` is exclusive UTC. The frontend must convert selected local calendar dates to timezone boundaries.
+Meeting lists use a bounded page size and a filter-bound keyset cursor. Supported sort values are recent, oldest, and title. `after` is inclusive UTC; `before` is exclusive UTC. Library calendar dates are converted from the chosen display timezone into UTC boundaries. Global-search date fields explicitly use UTC.
 
 Response errors contain `error.code`, a safe `error.message`, bounded `field_errors`, and a `request_id`. Invalid inputs use 422, missing service/session credentials 401, out-of-scope IDs 404, missing versions 428, stale versions 409, excessive bodies 413, quotas/rates 429, and temporary database failures 503.
 
 Additional routes support `/participants` for filter/owner choices, versioned participant-name corrections, meeting participant replacement with explicit unassign/reassign behavior, and meeting speaker-name correction. Workspace tasks are available at `/action-items`. These serve the library, task editor, and meeting metadata editor.
+
+
+## Retrieval and utility routes
+
+`GET /search` accepts `q`, `kind=title|transcript`, participant/tag UUIDs, inclusive `after` and exclusive `before` timestamps, and an offset cursor. Hits contain meeting and segment IDs, title, speaker, time, safe snippets, and code-point highlight ranges. The global dialog consumes this endpoint; it does not accept raw FTS expressions.
+
+`GET /meetings/{id}/export/manifest` reports the required numbered parts. `GET /meetings/{id}/export` accepts `format=txt|md|pdf`, `section=all|transcript|summary|tasks`, `timestamps`, `speaker_names`, and `part`. `/soundbites/{id}/export` downloads complete overlapping transcript turns for the interval. These are downloads, not JSON lists.
+
+`GET /intelligence` discloses configured provider/model and the context allowance without secrets. `GET /meetings/{id}/segments/{segment_id}/impact` lets the edit dialog explain affected annotations before committing changes. `GET /transcript/window` serves bounded seek neighborhoods. Chat history returns up to twenty messages per page, a meeting version, and the current transcript revision; clear-history and ask operations require that version.
+
+`GET /participants` supports literal name search and pages of 1–100 entries. A maximum of 500 workspace identities keeps option retrieval bounded. List endpoints declare their exact bounds in OpenAPI. Internal readiness checks and the storage CLI are operator-only consumers of migration/backup functionality.

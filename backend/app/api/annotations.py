@@ -63,6 +63,21 @@ def room(scope: Scoped, meeting_id: UUID, table: Table, maximum: int = 500) -> N
         )
         or 0
     )
+    total = sum(
+        scope.db.scalar(
+            select(func.count())
+            .select_from(kind)
+            .where(kind.c.workspace_id == scope.workspace_id, kind.c.meeting_id == str(meeting_id))
+        )
+        or 0
+        for kind in (comments, highlights, soundbites)
+    )
+    if total >= 500:
+        raise DomainError(
+            429,
+            "annotation_quota",
+            "This meeting supports 500 annotations in total. Remove an unused annotation first.",
+        )
     if count >= maximum:
         raise DomainError(
             429,

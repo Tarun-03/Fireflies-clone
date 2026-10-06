@@ -1,11 +1,12 @@
 import hashlib
 from datetime import UTC, datetime, timedelta
 
-from sqlalchemy import insert, select
+from sqlalchemy import func, insert, select
 
 from app.api.dependencies import Scope
+from app.core.config import get_settings
 from app.core.errors import DomainError
-from app.core.limits import check_storage
+from app.core.limits import check_storage, rate_limit
 from app.models import (
     action_items,
     attendees,
@@ -25,11 +26,13 @@ from app.repositories.meetings import meeting_details
 from app.repositories.scoped import get_resource
 from app.schemas.meetings import Meeting, MeetingCreate
 from app.services.activity import record_activity
+from app.services.maintenance import expire_key
 
 
 def create_meeting(
     scope: Scope, data: MeetingCreate, key: str, request_hash: str | None = None
 ) -> Meeting:
+    expire_key(scope.db, scope.workspace_id, "create-meeting", key)
     digest = request_hash or hashlib.sha256(data.model_dump_json().encode()).hexdigest()
     existing = (
         scope.db.execute(
@@ -52,6 +55,7 @@ def create_meeting(
                 409, "request_pending", "This request has not completed. Please retry later."
             )
         return Meeting.model_validate_json(existing["response_json"])
+    rate_limit(scope.session_id, "imports", get_settings().imports_per_ten_minutes, 600)
     check_storage(
         scope.db,
         scope.workspace_id,
@@ -102,6 +106,20 @@ def create_meeting(
         )
         if present is None:
             scope.db.execute(insert(attendees).values(**context, participant_id=person_id))
+    people_count = (
+        scope.db.scalar(
+            select(func.count())
+            .select_from(participants)
+            .where(participants.c.workspace_id == scope.workspace_id)
+        )
+        or 0
+    )
+    if people_count > 500:
+        raise DomainError(
+            429,
+            "participant_quota",
+            "This workspace supports up to 500 participants. Reuse an existing email identity.",
+        )
     speaker_ids: dict[str, str] = {}
     source_ids: list[str] = []
     for ordinal, segment in enumerate(data.segments):

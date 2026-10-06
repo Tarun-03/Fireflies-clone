@@ -214,6 +214,9 @@ export function TranscriptPanel({
         tabIndex={0}
         aria-label="Transcript turns"
         onWheel={() => setFollow(false)}
+        onPointerDown={(event) => {
+          if (event.target === event.currentTarget) setFollow(false);
+        }}
         onTouchMove={() => setFollow(false)}
         onKeyDown={(e) => {
           if (

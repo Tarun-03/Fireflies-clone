@@ -1975,6 +1975,7 @@ export interface operations {
             query?: {
                 q?: string;
                 limit?: number;
+                cursor?: number;
             };
             header?: {
                 "x-demo-session"?: string | null;
@@ -3775,6 +3776,8 @@ export interface operations {
                 tag?: string | null;
                 participant?: string | null;
                 kind?: ("title" | "transcript") | null;
+                after?: string | null;
+                before?: string | null;
             };
             header?: {
                 "x-demo-session"?: string | null;

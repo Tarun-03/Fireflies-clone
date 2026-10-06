@@ -13,6 +13,7 @@ from app.core.config import get_settings
 from app.core.errors import DomainError
 from app.schemas.intelligence import Evidence, GeneratedSummary, GeneratedTask
 from app.schemas.notebook import Segment
+from app.services.provider_guard import cooling_down, record_result
 
 CONTEXT_CHARACTERS = 24000
 
@@ -127,11 +128,19 @@ async def generate_summary(
             "extractive",
             "Live AI is not configured. Generated an extractive summary instead.",
         )
+    if cooling_down():
+        return (
+            extractive(rows),
+            "extractive",
+            "Live AI is cooling down after repeated failures. Showing extractive content.",
+        )
     try:
         async with asyncio.timeout(30):
             result = await provider_summary(select_context(rows), meeting_id, revision)
+        record_result(True)
         return result, "openai", None
     except (APIError, ValidationError, ValueError, TimeoutError):
+        record_result(False)
         return (
             extractive(rows),
             "extractive",

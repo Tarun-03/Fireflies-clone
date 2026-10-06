@@ -25,6 +25,8 @@ def find(
     participant: str | None = None,
     kind: str | None = None,
     conjunction: str = "AND",
+    after: str | None = None,
+    before: str | None = None,
 ) -> list[SearchHit]:
     expression = fts_query(query, conjunction)
     if not expression:
@@ -40,6 +42,12 @@ def find(
         if value:
             conditions.append(f"{column}=:{key}")
             params[key] = value
+    if after:
+        conditions.append("m.occurred_at>=:after")
+        params["after"] = after
+    if before:
+        conditions.append("m.occurred_at<:before")
+        params["before"] = before
     if tag:
         conditions.append(
             "EXISTS(SELECT 1 FROM meeting_tags t WHERE t.meeting_id=d.meeting_"

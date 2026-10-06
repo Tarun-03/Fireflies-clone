@@ -1,7 +1,9 @@
+from datetime import UTC
 from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Query
+from pydantic import AwareDatetime
 
 from app.api.dependencies import Scoped
 from app.schemas.common import Page
@@ -19,6 +21,8 @@ def search(
     tag: UUID | None = None,
     participant: UUID | None = None,
     kind: Literal["title", "transcript"] | None = None,
+    after: AwareDatetime | None = None,
+    before: AwareDatetime | None = None,
 ) -> Page[SearchHit]:
     hits = find(
         scope,
@@ -28,6 +32,8 @@ def search(
         tag=str(tag) if tag else None,
         participant=str(participant) if participant else None,
         kind=kind,
+        after=after.astimezone(UTC).isoformat() if after else None,
+        before=before.astimezone(UTC).isoformat() if before else None,
     )
     return Page(
         items=hits[:25],

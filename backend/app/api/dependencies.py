@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
 from app.core.errors import DomainError
-from app.core.limits import rate_limit
+from app.core.limits import check_database_budget, ensure_free_space, rate_limit
 from app.db.engine import engine
 from app.db.session import begin_write
 from app.models import demo_sessions, memberships
@@ -46,10 +46,19 @@ def get_scope(
     authenticated: Annotated[None, Depends(service_auth)],
 ) -> Iterator[Scope]:
     unsafe = request.method not in {"GET", "HEAD", "OPTIONS"}
-    rate_limit(session_id, "write" if unsafe else "read", 30 if unsafe else 120)
+    config = get_settings()
+    rate_limit(
+        session_id,
+        "write" if unsafe else "read",
+        config.writes_per_minute if unsafe else config.reads_per_minute,
+    )
     with Session(engine) as db:
         if unsafe:
+            if request.method != "DELETE":
+                ensure_free_space()
             begin_write(db)
+            if request.method != "DELETE":
+                check_database_budget(db)
         row = (
             db.execute(
                 select(demo_sessions)

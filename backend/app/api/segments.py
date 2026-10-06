@@ -2,7 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter
 from pydantic import Field, model_validator
-from sqlalchemy import delete, func, select, update
+from sqlalchemy import LargeBinary, cast, delete, func, select, update
 
 from app.api.dependencies import Scoped, Version, require_version
 from app.core.errors import DomainError
@@ -99,14 +99,13 @@ def edit(
         raise DomainError(422, "invalid_time", "The end must be within the meeting duration.")
     size = (
         scope.db.scalar(
-            select(func.sum(func.length(segments.c.text))).where(
+            select(func.sum(func.length(cast(segments.c.text, LargeBinary)))).where(
                 segments.c.meeting_id == str(meeting_id)
             )
         )
         or 0
     )
-    if (size - len(current.text) + len(data.text)) * 4 > 2 * 1024 * 1024:
-        # A conservative UTF-8 upper bound avoids allocating the full transcript during edits.
+    if size - len(current.text.encode()) + len(data.text.encode()) > 2 * 1024 * 1024:
         raise DomainError(429, "text_quota", "This edit exceeds the meeting text allowance.")
     if data.text != current.text:
         affected = impact(meeting_id, segment_id, scope)

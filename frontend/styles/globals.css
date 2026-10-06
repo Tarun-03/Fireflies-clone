@@ -1134,6 +1134,7 @@ small {
   min-width: 0;
 }
 .notes-scroll {
+  position: relative;
   height: 550px;
   overflow: auto;
   padding: 8px 24px 24px;
@@ -1237,6 +1238,7 @@ small {
   color: var(--text-muted);
 }
 .transcript-scroll {
+  position: relative;
   height: 400px;
   overflow: auto;
   position: relative;

@@ -74,7 +74,7 @@ async def ask(
     if_match: Version = None,
 ) -> ChatResult:
     meeting = get_resource(scope, meetings, str(meeting_id))
-    rate_limit(scope.session_id, "chat", 10)
+    rate_limit(scope.session_id, "generation", get_settings().ai_per_minute)
     endpoint = f"chat:{meeting_id}"
     key = str(idempotency_key)
     replay = claim(

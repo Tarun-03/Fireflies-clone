@@ -1,14 +1,14 @@
 "use client";
 import { useState } from "react";
 import { CheckSquare } from "lucide-react";
-import { useApi } from "@/components/providers";
+import { useApi, useAllPages } from "@/components/providers";
 import { ErrorNotice } from "@/components/dialog";
 import { TaskRow } from "@/features/tasks/task-row";
 import type { Page, Participant, Task } from "@/lib/types";
 export default function TasksPage() {
   const [status, setStatus] = useState("");
   const [cursor, setCursor] = useState("");
-  const people = useApi<Page<Participant>>("participants");
+  const people = useAllPages<Participant>("participants");
   const tasks = useApi<Page<Task>>(
     `action-items?limit=50${status ? `&status=${status}` : ""}${cursor ? `&cursor=${cursor}` : ""}`,
   );

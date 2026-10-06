@@ -5,6 +5,7 @@ from fastapi import APIRouter, Query
 from starlette.responses import Response
 
 from app.api.dependencies import Scoped
+from app.core.config import get_settings
 from app.core.errors import DomainError
 from app.core.limits import rate_limit
 from app.schemas.common import StrictModel
@@ -51,7 +52,7 @@ def export(
     speaker_names: bool = True,
     part: int = Query(1, ge=1, le=200),
 ) -> Response:
-    rate_limit(scope.session_id, "export", 30)
+    rate_limit(scope.session_id, "export", get_settings().exports_per_minute)
     content = parts(blocks(scope, str(meeting_id), section, timestamps, speaker_names))
     if part > len(content):
         raise DomainError(404, "not_found", "This export part does not exist.")

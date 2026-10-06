@@ -104,7 +104,12 @@ export function MeetingChat({
               in extractive mode.
             </p>
           )}
-          <div className="chat-history" aria-label="Chat history">
+          <div
+            className="chat-history"
+            aria-label="Chat history"
+            aria-busy={history.isLoading || action.isPending}
+          >
+            {history.isLoading && <p role="status">Loading conversation…</p>}
             {history.data?.items.length === 0 && (
               <div className="chat-suggestions">
                 <p>Start with a question about the conversation.</p>

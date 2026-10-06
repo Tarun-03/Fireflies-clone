@@ -10,6 +10,9 @@ export function locate(timeline: TimelineEntry[], time: number) {
       low = middle + 1;
     } else high = middle - 1;
   }
+  // An earlier long turn may still be speaking after a later overlapping turn ends.
+  for (let i = position; i >= 0; i--)
+    if (time < timeline[i].end_ms) return { segment: timeline[i], gap: false };
   const segment = timeline[position];
   return { segment, gap: !segment || time >= segment.end_ms };
 }

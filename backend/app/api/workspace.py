@@ -2,11 +2,12 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
-from sqlalchemy import delete, insert, select, update
+from sqlalchemy import delete, func, insert, select, update
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import Scoped, Version, require_version, service_auth, session_header
 from app.core.config import get_settings
+from app.core.errors import DomainError
 from app.core.limits import check_storage, rate_limit
 from app.db.engine import engine
 from app.db.session import begin_write
@@ -35,6 +36,7 @@ from app.schemas.workspace import (
     Tag,
     TagInput,
 )
+from app.services.maintenance import prune_expired
 from app.services.seed import bootstrap
 
 router = APIRouter(prefix="/api/v1")
@@ -42,10 +44,11 @@ router = APIRouter(prefix="/api/v1")
 
 @router.post("/demo/session", response_model=SessionResult, dependencies=[Depends(service_auth)])
 def session_create(session_id: Annotated[str, Depends(session_header)]) -> SessionResult:
-    rate_limit("global", "bootstrap", 20)
     with Session(engine) as db:
         begin_write(db)
+        prune_expired(db, apply=True)
         if db.scalar(select(demo_sessions.c.id).where(demo_sessions.c.id == session_id)) is None:
+            rate_limit("global", "bootstrap", 20)
             check_storage(db, added_bytes=200000)
         bootstrap(db, session_id)
         db.commit()
@@ -98,18 +101,30 @@ def write_preferences(
 
 @router.get("/participants", response_model=Page[Participant])
 def list_participants(
-    scope: Scoped, q: str = Query("", max_length=120), limit: int = Query(100, ge=1, le=100)
+    scope: Scoped,
+    q: str = Query("", max_length=120),
+    limit: int = Query(100, ge=1, le=100),
+    cursor: int = Query(0, ge=0, le=500),
 ) -> Page[Participant]:
-    rows = scope.db.execute(
-        select(participants)
-        .where(
-            participants.c.workspace_id == scope.workspace_id,
-            participants.c.display_name.icontains(q, autoescape=True),
+    rows = (
+        scope.db.execute(
+            select(participants)
+            .where(
+                participants.c.workspace_id == scope.workspace_id,
+                participants.c.display_name.icontains(q, autoescape=True),
+            )
+            .order_by(participants.c.display_name, participants.c.id)
+            .offset(cursor)
+            .limit(limit + 1)
         )
-        .order_by(participants.c.display_name, participants.c.id)
-        .limit(limit)
-    ).mappings()
-    return Page(items=[Participant.model_validate(row) for row in rows])
+        .mappings()
+        .all()
+    )
+    return Page(
+        items=[Participant.model_validate(row) for row in rows[:limit]],
+        has_more=len(rows) > limit,
+        next_cursor=str(cursor + limit) if len(rows) > limit else None,
+    )
 
 
 @router.patch("/participants/{participant_id}", response_model=Participant)
@@ -139,6 +154,16 @@ def list_tags(scope: Scoped) -> Page[Tag]:
 
 @router.post("/tags", response_model=Tag, status_code=201)
 def create_tag(data: TagInput, scope: Scoped) -> Tag:
+    count = (
+        scope.db.scalar(
+            select(func.count()).select_from(tags).where(tags.c.workspace_id == scope.workspace_id)
+        )
+        or 0
+    )
+    if count >= 100:
+        raise DomainError(
+            429, "tag_quota", "This workspace supports up to 100 tags. Remove an unused tag first."
+        )
     tag_id = uid()
     scope.db.execute(
         insert(tags).values(

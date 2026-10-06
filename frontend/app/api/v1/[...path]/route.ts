@@ -61,10 +61,19 @@ async function handle(
     ])
       if (response.headers.has(name))
         outgoing.set(name, response.headers.get(name)!);
-    const result = new NextResponse(response.body, {
-      status: response.status,
-      headers: outgoing,
-    });
+    const maximum = response.headers
+      .get("content-type")
+      ?.includes("application/json")
+      ? 1024 * 1024 - 1
+      : 4 * 1024 * 1024 - 1;
+    const payload = await boundedBody(response, maximum);
+    const result = new NextResponse(
+      payload.length ? Buffer.from(payload) : null,
+      {
+        status: response.status,
+        headers: outgoing,
+      },
+    );
     return result;
   } catch (error) {
     return failure(error);

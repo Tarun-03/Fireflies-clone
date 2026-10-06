@@ -1,7 +1,7 @@
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import SecretStr, model_validator
+from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -14,6 +14,11 @@ class Settings(BaseSettings):
     llm_provider: Literal["disabled", "openai"] = "disabled"
     openai_api_key: SecretStr = SecretStr("")
     llm_model: str = ""
+    reads_per_minute: int = Field(120, ge=1, le=10000)
+    writes_per_minute: int = Field(30, ge=1, le=1000)
+    imports_per_ten_minutes: int = Field(5, ge=1, le=100)
+    exports_per_minute: int = Field(10, ge=1, le=100)
+    ai_per_minute: int = Field(5, ge=1, le=100)
     max_workspaces: int = 500
     max_meetings: int = 100
     global_text_bytes: int = 512 * 1024 * 1024

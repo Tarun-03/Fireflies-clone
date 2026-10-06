@@ -126,8 +126,17 @@ def library(scope: Scope, filters: Filters, limit: int, cursor: str | None) -> P
         .mappings()
         .all()
     )
-    more = len(rows) > limit
-    rows = rows[:limit]
+    details = meeting_details(scope, [row["id"] for row in rows[:limit]])
+    used = 0
+    count = 0
+    for detail in details:
+        size = len(detail.model_dump_json().encode())
+        if used + size > 750 * 1024 and count:
+            break
+        used += size
+        count += 1
+    more = len(rows) > count
+    rows = rows[:count]
     next_cursor = None
     if more:
         last = rows[-1]
@@ -136,7 +145,7 @@ def library(scope: Scope, filters: Filters, limit: int, cursor: str | None) -> P
             Cursor(value=value, id=last["id"], fingerprint=fingerprint).model_dump_json().encode()
         ).decode()
     return Page(
-        items=meeting_details(scope, [row["id"] for row in rows]),
+        items=details[:count],
         has_more=more,
         next_cursor=next_cursor,
         applied_filters=applied,

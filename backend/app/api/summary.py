@@ -94,7 +94,7 @@ async def regenerate(
 ) -> Summary:
     meeting = get_resource(scope, meetings, str(meeting_id))
     current = summary(meeting_id, scope)
-    rate_limit(scope.session_id, "generation", 5)
+    rate_limit(scope.session_id, "generation", get_settings().ai_per_minute)
     endpoint = f"summary:{meeting_id}"
     key = str(idempotency_key)
     digest = hashlib.sha256(data.model_dump_json().encode()).hexdigest()
