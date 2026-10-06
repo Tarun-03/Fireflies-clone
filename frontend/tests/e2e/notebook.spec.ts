@@ -75,7 +75,7 @@ test("notebook search, seeking, follow, notes, and responsive playback", async (
       ),
     ).toEqual([]);
     await page.screenshot({
-      path: `../docs/screenshots/notebook-${width}.png`,
+      path: test.info().outputPath(`notebook-${width}.png`),
       fullPage: true,
     });
   }
@@ -113,7 +113,7 @@ test("notebook search, seeking, follow, notes, and responsive playback", async (
       ),
     ).toEqual([]);
     await page.screenshot({
-      path: `../docs/screenshots/notebook-dark-${width}.png`,
+      path: test.info().outputPath(`notebook-dark-${width}.png`),
       fullPage: true,
     });
   }

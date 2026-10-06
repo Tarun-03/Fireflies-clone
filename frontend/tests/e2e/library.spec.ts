@@ -52,7 +52,7 @@ test("library filters, preferences, notifications and responsive layouts", async
       );
       expect(violations).toEqual([]);
       await page.screenshot({
-        path: `../docs/screenshots/library-${theme}-${width}.png`,
+        path: test.info().outputPath(`library-${theme}-${width}.png`),
         fullPage: true,
       });
     }

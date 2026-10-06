@@ -14,7 +14,7 @@ Semantic light and dark tokens live in frontend/styles/globals.css. Keyboard foc
 
 ## Verified interface
 
-The library was reviewed at 390, 768, 1024, and 1440 pixels in light and dark themes. Playwright verified no horizontal overflow, filter restoration after refresh, notification read persistence, and theme persistence. Axe found no serious or critical findings across these eight library views after correcting the mobile create-button label. Screenshots are stored in `docs/screenshots/`.
+The library was reviewed at 390, 768, 1024, and 1440 pixels in light and dark themes. Playwright verified no horizontal overflow, filter restoration after refresh, notification read persistence, and theme persistence. Axe found no serious or critical findings across these eight library views after correcting the mobile create-button label. Two representative screenshots are stored in `docs/screenshots/` for the README. Browser runs write the full breakpoint/theme set to ignored `frontend/test-results/` artifacts.
 
 
 The completed notebook has a narrow annotation/assistant rail, split notes/transcript panels, and a shared player. On mobile the tools become a horizontal row and tabs switch panels without losing playback. Light and dark notebook screenshots cover 390, 768, 1024, and 1440 pixels. Browser checks cover contrast/focus semantics with axe, keyboard search, source seeking, dialog workflows, and page-overflow bounds. Automated accessibility checks are a useful screen, not a complete accessibility certification.
