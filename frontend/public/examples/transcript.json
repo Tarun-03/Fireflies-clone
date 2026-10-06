@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "title": "Synthetic pilot review",
+  "occurred_at": "2026-10-06T09:00:00Z",
+  "duration_ms": 70000,
+  "participants": [
+    { "display_name": "Maya", "email": "maya@example.com" },
+    { "display_name": "Jordan" }
+  ],
+  "segments": [
+    {
+      "speaker": "Maya",
+      "start_ms": 0,
+      "end_ms": 25000,
+      "text": "We decided to keep the pilot small and review feedback on Friday."
+    },
+    {
+      "speaker": "Jordan",
+      "start_ms": 24000,
+      "end_ms": 45000,
+      "text": "I will write the pilot checklist. It needs a clear owner for every action."
+    },
+    {
+      "speaker": "Maya",
+      "start_ms": 50000,
+      "end_ms": 70000,
+      "text": "Let’s review the checklist together before sharing it."
+    }
+  ]
+}

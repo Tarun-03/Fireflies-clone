@@ -6,11 +6,13 @@ import { ErrorNotice } from "@/components/dialog";
 import { Avatar } from "@/components/avatar";
 import { timestamp } from "@/lib/time";
 import type {
+  Segment,
   Speaker,
   TimelineEntry,
   Transcript as TranscriptData,
   TranscriptSearch,
 } from "@/lib/types";
+import { SegmentEditor } from "./segment-editor";
 import { locate } from "./playback";
 import type { PlayerState } from "./use-player";
 export function Marked({
@@ -44,6 +46,7 @@ export function TranscriptPanel({
   player: PlayerState;
   initialSegment: string | null;
 }) {
+  const [editing, setEditing] = useState<Segment | null>(null);
   const [query, setQuery] = useState("");
   const [speaker, setSpeaker] = useState("");
   const [follow, setFollow] = useState(true);
@@ -243,6 +246,12 @@ export function TranscriptPanel({
                 )}
               </div>
               <p>{segment.text}</p>
+              <button
+                className="source-link"
+                onClick={() => setEditing(segment)}
+              >
+                Edit turn
+              </button>
             </div>
           </article>
         ))}
@@ -272,6 +281,13 @@ export function TranscriptPanel({
           </button>
         </div>
       </div>
+      {editing && (
+        <SegmentEditor
+          id={id}
+          segment={editing}
+          close={() => setEditing(null)}
+        />
+      )}
     </section>
   );
 }

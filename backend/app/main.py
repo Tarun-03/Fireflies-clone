@@ -7,7 +7,7 @@ from starlette.middleware.base import RequestResponseEndpoint
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.responses import JSONResponse, Response
 
-from app.api import meetings, summary, tasks, transcript, workspace
+from app.api import imports, meetings, segments, summary, tasks, transcript, workspace
 from app.api.errors import install_errors
 from app.core.body_limit import BodyLimitMiddleware
 from app.core.config import get_settings
@@ -43,6 +43,7 @@ def ready() -> JSONResponse:
 app.add_middleware(BodyLimitMiddleware)
 install_errors(app)
 app.include_router(workspace.router)
+app.include_router(imports.router)
 app.include_router(meetings.router)
 app.include_router(tasks.router)
 
@@ -59,3 +60,5 @@ async def request_headers(request: Request, call_next: RequestResponseEndpoint) 
 
 app.include_router(transcript.router)
 app.include_router(summary.router)
+
+app.include_router(segments.router)

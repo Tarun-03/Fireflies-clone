@@ -16,3 +16,6 @@ export type TranscriptSearch = components["schemas"]["TranscriptSearch"];
 export type Summary = components["schemas"]["Summary"];
 export type Chapter = components["schemas"]["Chapter"];
 export type Speaker = components["schemas"]["Speaker"];
+export type ImportPreview = components["schemas"]["ImportPreview"];
+export type SegmentInput = components["schemas"]["SegmentInput"];
+export type SegmentImpact = components["schemas"]["SegmentImpact"];

@@ -27,8 +27,10 @@ from app.schemas.meetings import Meeting, MeetingCreate
 from app.services.activity import record_activity
 
 
-def create_meeting(scope: Scope, data: MeetingCreate, key: str) -> Meeting:
-    digest = hashlib.sha256(data.model_dump_json().encode()).hexdigest()
+def create_meeting(
+    scope: Scope, data: MeetingCreate, key: str, request_hash: str | None = None
+) -> Meeting:
+    digest = request_hash or hashlib.sha256(data.model_dump_json().encode()).hexdigest()
     existing = (
         scope.db.execute(
             select(idempotency_records).where(
@@ -141,14 +143,16 @@ def create_meeting(scope: Scope, data: MeetingCreate, key: str) -> Meeting:
         )
     )
     tasks_seen: set[str] = set()
+    point_count = 0
     for index, segment in enumerate(data.segments):
-        if index < 5 or "we decided" in segment.text.casefold():
+        if point_count < 30 and (index < 5 or "we decided" in segment.text.casefold()):
+            point_count += 1
             scope.db.execute(
                 insert(summary_points).values(
                     **context,
                     summary_id=summary_id,
                     kind="decision" if "we decided" in segment.text.casefold() else "key_point",
-                    text=segment.text,
+                    text=segment.text[:2000],
                     position=index,
                     source_segment_id=source_ids[index],
                 )

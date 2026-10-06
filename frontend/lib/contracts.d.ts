@@ -194,6 +194,40 @@ export interface paths {
         patch: operations["mark_activity_api_v1_activity__event_id__patch"];
         trace?: never;
     };
+    "/api/v1/meetings/import/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preview */
+        post: operations["preview_api_v1_meetings_import_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Import Meeting */
+        post: operations["import_meeting_api_v1_meetings_import_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/meetings": {
         parameters: {
             query?: never;
@@ -455,6 +489,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/meetings/{meeting_id}/segments/{segment_id}/impact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Impact */
+        get: operations["impact_api_v1_meetings__meeting_id__segments__segment_id__impact_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting_id}/segments/{segment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove */
+        delete: operations["remove_api_v1_meetings__meeting_id__segments__segment_id__delete"];
+        options?: never;
+        head?: never;
+        /** Edit */
+        patch: operations["edit_api_v1_meetings__meeting_id__segments__segment_id__patch"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -518,6 +587,52 @@ export interface components {
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** ImportPreview */
+        ImportPreview: {
+            /** Title */
+            title: string | null;
+            /** Occurred At */
+            occurred_at: string | null;
+            /** Participants */
+            participants: components["schemas"]["PersonInput"][];
+            /** Segments */
+            segments: components["schemas"]["SegmentInput"][];
+            /** Segment Count */
+            segment_count: number;
+            /** Duration Ms */
+            duration_ms: number;
+            /** Estimated Timing */
+            estimated_timing: boolean;
+            /** Warnings */
+            warnings: string[];
+        };
+        /** ImportRequest */
+        ImportRequest: {
+            /**
+             * Format
+             * @enum {string}
+             */
+            format: "txt" | "vtt" | "json";
+            /** Filename */
+            filename?: string | null;
+            /** Content */
+            content?: string | null;
+            /** Content Base64 */
+            content_base64?: string | null;
+            /** Title */
+            title?: string | null;
+            /** Occurred At */
+            occurred_at?: string | null;
+            /** Participants */
+            participants?: components["schemas"]["PersonInput"][] | null;
+            /** Tag Ids */
+            tag_ids?: string[];
+            /**
+             * Acknowledge Estimated
+             * @default false
+             */
+            acknowledge_estimated: boolean;
         };
         /** Meeting */
         Meeting: {
@@ -803,6 +918,15 @@ export interface components {
             /** Stable Color Key */
             stable_color_key: number;
         };
+        /** SegmentImpact */
+        SegmentImpact: {
+            /** Highlights */
+            highlights: number;
+            /** Comments */
+            comments: number;
+            /** Citations */
+            citations: number;
+        };
         /** SegmentInput */
         SegmentInput: {
             /** Speaker */
@@ -813,6 +937,20 @@ export interface components {
             end_ms: number;
             /** Text */
             text: string;
+        };
+        /** SegmentUpdate */
+        SegmentUpdate: {
+            /** Text */
+            text: string;
+            /** Start Ms */
+            start_ms: number;
+            /** End Ms */
+            end_ms: number;
+            /**
+             * Remove Affected Highlights
+             * @default false
+             */
+            remove_affected_highlights: boolean;
         };
         /** SessionResult */
         SessionResult: {
@@ -1500,6 +1638,79 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Activity"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    preview_api_v1_meetings_import_preview_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportPreview"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    import_meeting_api_v1_meetings_import_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "idempotency-key": string;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Meeting"];
                 };
             };
             /** @description Validation Error */
@@ -2275,6 +2486,115 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Chapter"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    impact_api_v1_meetings__meeting_id__segments__segment_id__impact_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SegmentImpact"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_api_v1_meetings__meeting_id__segments__segment_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    edit_api_v1_meetings__meeting_id__segments__segment_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                segment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SegmentUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Segment"];
                 };
             };
             /** @description Validation Error */

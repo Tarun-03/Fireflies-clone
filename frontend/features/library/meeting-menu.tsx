@@ -1,4 +1,7 @@
 "use client";
+import { useRouter, usePathname } from "next/navigation";
+import { MeetingPeople } from "./meeting-people";
+import { api, ApiError } from "@/lib/api";
 import { useState } from "react";
 import * as Dropdown from "@radix-ui/react-dropdown-menu";
 import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
@@ -6,7 +9,13 @@ import { Dialog, ErrorNotice } from "@/components/dialog";
 import { useAction } from "@/components/providers";
 import type { Meeting } from "@/lib/types";
 export function MeetingMenu({ meeting }: { meeting: Meeting }) {
-  const [mode, setMode] = useState<"edit" | "delete" | null>(null);
+  const [mode, setMode] = useState<"edit" | "delete" | "people" | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const [date, setDate] = useState(meeting.occurred_at.slice(0, 16));
+  const [duration, setDuration] = useState(meeting.duration_ms / 60000);
+  const [description, setDescription] = useState(meeting.description ?? "");
+  const [version, setVersion] = useState(meeting.version);
   const [title, setTitle] = useState(meeting.title);
   const action = useAction();
   return (
@@ -20,9 +29,21 @@ export function MeetingMenu({ meeting }: { meeting: Meeting }) {
         </Dropdown.Trigger>
         <Dropdown.Portal>
           <Dropdown.Content className="dropdown" align="end">
-            <Dropdown.Item onSelect={() => setMode("edit")}>
+            <Dropdown.Item
+              onSelect={() => {
+                setVersion(meeting.version);
+                setTitle(meeting.title);
+                setDate(meeting.occurred_at.slice(0, 16));
+                setDuration(meeting.duration_ms / 60000);
+                setDescription(meeting.description ?? "");
+                setMode("edit");
+              }}
+            >
               <Pencil size={15} />
-              Rename meeting
+              Edit meeting
+            </Dropdown.Item>
+            <Dropdown.Item onSelect={() => setMode("people")}>
+              Attendees and tags
             </Dropdown.Item>
             <Dropdown.Item
               className="danger-text"
@@ -34,28 +55,73 @@ export function MeetingMenu({ meeting }: { meeting: Meeting }) {
           </Dropdown.Content>
         </Dropdown.Portal>
       </Dropdown.Root>
-      {mode && (
+      {mode === "people" && (
+        <MeetingPeople meeting={meeting} close={() => setMode(null)} />
+      )}
+      {mode && mode !== "people" && (
         <Dialog
           open
           onOpenChange={() => setMode(null)}
-          title={mode === "edit" ? "Rename meeting" : "Delete meeting?"}
+          title={mode === "edit" ? "Edit meeting" : "Delete meeting?"}
           description={
             mode === "delete"
               ? "This permanently removes the transcript, notes, tasks, annotations, and chat for this meeting."
-              : "Give this conversation a useful name."
+              : "Update the meeting details. Dates in this editor use UTC."
           }
         >
           {mode === "edit" && (
-            <label className="form-stack">
-              Meeting title
-              <input
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-                maxLength={200}
-              />
-            </label>
+            <div className="form-stack">
+              <label>
+                Meeting title
+                <input
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                  maxLength={200}
+                />
+              </label>
+              <label>
+                Meeting date (UTC)
+                <input
+                  type="datetime-local"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </label>
+              <label>
+                Duration (minutes)
+                <input
+                  type="number"
+                  min={1 / 60}
+                  max={360}
+                  step="any"
+                  value={duration}
+                  onChange={(e) => setDuration(Number(e.target.value))}
+                />
+              </label>
+              <label>
+                Description
+                <textarea
+                  rows={3}
+                  maxLength={4000}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </label>
+            </div>
           )}
           <ErrorNotice error={action.error} />
+          {action.error instanceof ApiError && action.error.status === 409 && (
+            <button
+              onClick={() =>
+                api<Meeting>(`meetings/${meeting.id}`).then(
+                  (latest) => setVersion(latest.version),
+                  () => {},
+                )
+              }
+            >
+              Load latest version, keep draft
+            </button>
+          )}
           <div className="dialog-actions">
             <button onClick={() => setMode(null)}>Cancel</button>
             <button
@@ -66,13 +132,28 @@ export function MeetingMenu({ meeting }: { meeting: Meeting }) {
                   .mutateAsync({
                     path: `meetings/${meeting.id}`,
                     method: mode === "delete" ? "DELETE" : "PATCH",
-                    version: meeting.version,
-                    body: mode === "delete" ? undefined : { title },
+                    version: mode === "delete" ? meeting.version : version,
+                    body:
+                      mode === "delete"
+                        ? undefined
+                        : {
+                            title,
+                            occurred_at: new Date(date + "Z").toISOString(),
+                            duration_ms: Math.round(duration * 60000),
+                            description,
+                          },
                     message:
                       mode === "delete" ? "Meeting deleted" : "Meeting renamed",
                   })
                   .then(
-                    () => setMode(null),
+                    () => {
+                      setMode(null);
+                      if (
+                        mode === "delete" &&
+                        pathname.startsWith("/meetings/")
+                      )
+                        router.push("/");
+                    },
                     () => {},
                   )
               }

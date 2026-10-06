@@ -1457,3 +1457,56 @@ input.player-range {
     font-size: 10px;
   }
 }
+.notebook {
+  padding: 24px;
+}
+.tag-picker {
+  border: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+}
+.tag-picker legend {
+  margin-bottom: 8px;
+}
+.tag-picker label,
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.tag-picker input,
+.checkbox-label input {
+  width: 16px;
+  height: 16px;
+}
+.manual-turn {
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 8px;
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.import-preview {
+  padding: 14px;
+  background: var(--surface-muted);
+  border-radius: 8px;
+  font-size: 12px;
+}
+.example-links {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+}
+.example-links a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+@media (max-width: 800px) {
+  .notebook {
+    padding: 16px;
+  }
+}
