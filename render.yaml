@@ -2,7 +2,7 @@ services:
   - type: web
     name: meeting-workspace-api
     runtime: docker
-    plan: starter
+    plan: free
     region: singapore
     numInstances: 1
     dockerfilePath: ./backend/Dockerfile
