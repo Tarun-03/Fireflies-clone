@@ -3,3 +3,9 @@
 __pycache__
 *.db*
 .pytest_cache
+
+.env.*
+*.sqlite*
+.mypy_cache
+.ruff_cache
+tests

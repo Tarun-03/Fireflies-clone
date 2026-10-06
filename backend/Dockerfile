@@ -4,7 +4,13 @@ COPY --from=uv /uv /uvx /bin/
 WORKDIR /app
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev
-COPY . .
-ENV PATH="/app/.venv/bin:$PATH"
+COPY app ./app
+COPY alembic ./alembic
+COPY alembic.ini ./
+COPY fixtures ./fixtures
+COPY assets ./assets
+COPY scripts ./scripts
+RUN useradd --uid 10001 --create-home workspace && mkdir -p /var/data && chown workspace:workspace /var/data
+ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 EXPOSE 8000
-CMD ["sh", "-c", "alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1"]
+CMD ["python", "-m", "scripts.container_start"]

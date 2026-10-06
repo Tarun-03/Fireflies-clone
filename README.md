@@ -47,7 +47,7 @@ npm run build
 npm run test:e2e
 ```
 
-Docker Compose uses a named volume for the database. Set the environment files before running `docker compose up --build`.
+Docker Compose uses a named volume for the database. Set the environment files before running `docker compose up --build`. See the [deployment and operations guide](docs/deployment.md) for Render, Vercel, persistence checks, and current verification limits.
 
 AI is disabled by default. No public repository or hosted application has been verified yet.
 

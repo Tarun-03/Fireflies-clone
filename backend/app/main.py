@@ -1,8 +1,15 @@
 import json
 import logging
 import time
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+from functools import lru_cache
+from pathlib import Path
 from uuid import uuid4
 
+import anyio.to_thread
+from alembic.config import Config
+from alembic.script import ScriptDirectory
 from fastapi import FastAPI, Request
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -29,8 +36,29 @@ from app.core.config import get_settings
 from app.db.engine import engine
 
 settings = get_settings()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    anyio.to_thread.current_default_thread_limiter().total_tokens = 8
+    yield
+
+
+@lru_cache(maxsize=1)
+def migration_heads() -> set[str]:
+    root = Path(__file__).resolve().parents[1]
+    config = Config(str(root / "alembic.ini"))
+    config.set_main_option("script_location", str(root / "alembic"))
+    return set(ScriptDirectory.from_config(config).get_heads())
+
+
 app = FastAPI(
-    title="Meeting workspace", version="1.0.0", docs_url=None, redoc_url=None, openapi_url=None
+    lifespan=lifespan,
+    title="Meeting workspace",
+    version="1.0.0",
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
 )
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts.split(","))
 
@@ -44,7 +72,10 @@ def live() -> dict[str, str]:
 def ready() -> JSONResponse:
     try:
         with engine.connect() as connection:
-            connection.execute(text("SELECT version_num FROM alembic_version"))
+            versions = set(connection.scalars(text("SELECT version_num FROM alembic_version")))
+            if versions != migration_heads():
+                return JSONResponse({"status": "unavailable"}, status_code=503)
+            connection.execute(text("SELECT rowid FROM search_documents_fts LIMIT 0"))
             available = connection.execute(
                 text("SELECT sqlite_compileoption_used('ENABLE_FTS5')")
             ).scalar()

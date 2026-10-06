@@ -79,3 +79,44 @@ jobs:
           name: browser-failure-traces
           path: frontend/test-results
           retention-days: 7
+  containers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      INTERNAL_API_TOKEN: ci-only-service-token-with-at-least-32-characters
+      SESSION_SIGNING_SECRET: ci-only-distinct-cookie-signing-secret-with-32-characters
+      ENVIRONMENT: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.5'
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.12.23'
+      - name: Prepare private test configuration
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          token = 'INTERNAL_API_TOKEN=' + os.environ['INTERNAL_API_TOKEN'] + '\n'
+          Path('backend/.env').write_text(token)
+          Path('frontend/.env.local').write_text(token + 'SESSION_SIGNING_SECRET=' + os.environ['SESSION_SIGNING_SECRET'] + '\n')
+          PY
+          uv sync --frozen --no-dev --project backend
+      - name: Build, start, and verify persistent volume
+        run: |
+          docker compose config --quiet
+          docker compose up --build -d --wait --wait-timeout 120
+          curl --fail --retry 15 --retry-all-errors --retry-delay 2 http://localhost:3000/ > /dev/null
+          cd backend
+          uv run --no-dev python -m scripts.persistence_probe before --state /tmp/container-persistence.json
+          docker compose -f ../compose.yaml restart backend
+          curl --fail --retry 15 --retry-all-errors --retry-delay 2 http://127.0.0.1:8000/health/ready
+          uv run --no-dev python -m scripts.persistence_probe after --state /tmp/container-persistence.json
+      - name: Container diagnostics
+        if: failure()
+        run: docker compose logs --tail 100
+      - name: Stop test containers
+        if: always()
+        run: docker compose down

@@ -3,19 +3,33 @@ services:
     build: ./backend
     env_file: ./backend/.env
     environment:
+      ENVIRONMENT: development
       DATABASE_URL: sqlite:////var/data/meeting-workspace.db
+      ALLOWED_HOSTS: localhost,127.0.0.1,backend
+      LLM_PROVIDER: disabled
     volumes:
       - meeting-data:/var/data
     ports:
-      - "127.0.0.1:8000:8000"
+      - '127.0.0.1:8000:8000'
+    healthcheck:
+      test: ['CMD', 'python', '-c', "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
   frontend:
     build: ./frontend
     env_file: ./frontend/.env.local
     environment:
+      APP_ENV: development
+      APP_ORIGIN: http://localhost:3000
       BACKEND_URL: http://backend:8000
     ports:
-      - "3000:3000"
+      - '127.0.0.1:3000:3000'
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
 volumes:
   meeting-data:
