@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/inter";
 import "@/styles/globals.css";
+export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "fireflies · Meeting workspace",
   description:

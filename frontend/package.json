@@ -49,5 +49,9 @@
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
     "vitest": "5.0.3"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-darwin-arm64": "1.2.12",
+    "@rolldown/binding-linux-x64-gnu": "1.2.12"
   }
 }

@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     llm_provider: Literal["disabled", "openai"] = "disabled"
     openai_api_key: SecretStr = SecretStr("")
     llm_model: str = ""
+    max_workspaces: int = 500
+    max_meetings: int = 100
+    global_text_bytes: int = 512 * 1024 * 1024
+    disk_reserve_bytes: int = 100 * 1024 * 1024
 
     @model_validator(mode="after")
     def validate_configuration(self) -> "Settings":

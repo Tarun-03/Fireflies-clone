@@ -1,9 +1,15 @@
-from fastapi import FastAPI
+from uuid import uuid4
+
+from fastapi import FastAPI, Request
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
+from starlette.middleware.base import RequestResponseEndpoint
 from starlette.middleware.trustedhost import TrustedHostMiddleware
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 
+from app.api import meetings, tasks, workspace
+from app.api.errors import install_errors
+from app.core.body_limit import BodyLimitMiddleware
 from app.core.config import get_settings
 from app.db.engine import engine
 
@@ -32,3 +38,20 @@ def ready() -> JSONResponse:
     except SQLAlchemyError:
         return JSONResponse({"status": "unavailable"}, status_code=503)
     return JSONResponse({"status": "ok"})
+
+
+app.add_middleware(BodyLimitMiddleware)
+install_errors(app)
+app.include_router(workspace.router)
+app.include_router(meetings.router)
+app.include_router(tasks.router)
+
+
+@app.middleware("http")
+async def request_headers(request: Request, call_next: RequestResponseEndpoint) -> Response:
+    request.state.request_id = str(uuid4())
+    result = await call_next(request)
+    result.headers["X-Request-ID"] = request.state.request_id
+    result.headers["Cache-Control"] = "no-store"
+    result.headers["X-Content-Type-Options"] = "nosniff"
+    return result
