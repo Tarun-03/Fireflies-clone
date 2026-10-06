@@ -64,6 +64,7 @@ class Summary(PublicModel):
     version: int
     stale: bool
     points: list[SummaryPoint]
+    notice: str | None = None
 
 
 class NotesUpdate(StrictModel):

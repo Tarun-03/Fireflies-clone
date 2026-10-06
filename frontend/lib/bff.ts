@@ -107,13 +107,15 @@ export async function backendFetch(
     headers,
     cache: "no-store",
     redirect: "error",
-    signal: AbortSignal.timeout(40000),
+    signal: init.signal
+      ? AbortSignal.any([init.signal, AbortSignal.timeout(40000)])
+      : AbortSignal.timeout(40000),
   });
 }
 const uuid =
   "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 const routes: [RegExp, readonly string[]][] = [
-  [/^me$/, ["GET"]],
+  [/^(?:me|intelligence)$/, ["GET"]],
   [new RegExp(`^meetings/${uuid}/segments/${uuid}/impact$`), ["GET"]],
   [/^me\/preferences$/, ["GET", "PATCH"]],
   [/^meetings$/, ["GET", "POST"]],

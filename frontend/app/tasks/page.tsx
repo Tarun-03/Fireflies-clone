@@ -1,16 +1,17 @@
 "use client";
-import Link from "next/link";
 import { useState } from "react";
 import { CheckSquare } from "lucide-react";
-import { useAction, useApi } from "@/components/providers";
+import { useApi } from "@/components/providers";
 import { ErrorNotice } from "@/components/dialog";
-import type { Page, Task } from "@/lib/types";
+import { TaskRow } from "@/features/tasks/task-row";
+import type { Page, Participant, Task } from "@/lib/types";
 export default function TasksPage() {
   const [status, setStatus] = useState("");
+  const [cursor, setCursor] = useState("");
+  const people = useApi<Page<Participant>>("participants");
   const tasks = useApi<Page<Task>>(
-    `action-items${status ? `?status=${status}` : ""}`,
+    `action-items?limit=50${status ? `&status=${status}` : ""}${cursor ? `&cursor=${cursor}` : ""}`,
   );
-  const action = useAction();
   return (
     <div className="library">
       <div className="page-heading">
@@ -21,57 +22,54 @@ export default function TasksPage() {
         <select
           aria-label="Task status"
           value={status}
-          onChange={(event) => setStatus(event.target.value)}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            setCursor("");
+          }}
         >
           <option value="">All tasks</option>
           <option value="open">Open</option>
           <option value="completed">Completed</option>
         </select>
       </div>
-      <ErrorNotice error={tasks.error ?? action.error} />
+      <ErrorNotice error={tasks.error} />
+      {tasks.isError && (
+        <button onClick={() => tasks.refetch()}>Retry tasks</button>
+      )}
       {tasks.isLoading ? (
         <p>Loading action items…</p>
-      ) : !tasks.data?.items.length ? (
+      ) : tasks.data?.items.length === 0 ? (
         <div className="empty-state">
           <CheckSquare size={30} />
           <h2>Nothing to follow up on</h2>
-          <p>Action items from your meetings appear here.</p>
+          <p>Add action items inside a meeting notebook.</p>
         </div>
       ) : (
         <div className="task-list">
-          {tasks.data.items.map((task) => (
-            <div className="task-row" key={task.id}>
-              <input
-                type="checkbox"
-                aria-label={`Complete ${task.text}`}
-                checked={task.status === "completed"}
-                disabled={action.isPending}
-                onChange={() =>
-                  action.mutate({
-                    path: `meetings/${task.meeting_id}/action-items/${task.id}`,
-                    method: "PATCH",
-                    version: task.version,
-                    body: {
-                      status:
-                        task.status === "completed" ? "open" : "completed",
-                    },
-                  })
-                }
-              />
-              <span className={task.status === "completed" ? "completed" : ""}>
-                {task.text}
-                <small>
-                  {task.due_date ? `Due ${task.due_date}` : "No due date"} ·{" "}
-                  {task.origin === "manual"
-                    ? "Added manually"
-                    : "From transcript"}
-                </small>
-              </span>
-              <Link href={`/meetings/${task.meeting_id}`}>View meeting</Link>
-            </div>
+          {tasks.data?.items.map((task) => (
+            <TaskRow
+              key={task.id}
+              task={task}
+              people={people.data?.items ?? []}
+              showMeeting
+            />
           ))}
         </div>
       )}
+      <div className="pagination">
+        <span>{tasks.data?.items.length ?? 0} tasks on this page</span>
+        <div>
+          <button disabled={!cursor} onClick={() => setCursor("")}>
+            First page
+          </button>
+          <button
+            disabled={!tasks.data?.next_cursor}
+            onClick={() => setCursor(tasks.data?.next_cursor ?? "")}
+          >
+            Next page
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

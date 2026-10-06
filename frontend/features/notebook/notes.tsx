@@ -1,10 +1,13 @@
 "use client";
 import { useState } from "react";
-import { CheckSquare, FileText, ListTree, Sparkles } from "lucide-react";
+import { FileText, ListTree, Sparkles } from "lucide-react";
 import { useAction, useApi } from "@/components/providers";
 import { ErrorNotice } from "@/components/dialog";
+import { MeetingTasks } from "@/features/tasks/meeting-tasks";
+import { Regenerate } from "./regenerate";
+import { api } from "@/lib/api";
 import { timestamp } from "@/lib/time";
-import type { Chapter, Page, Summary, Task, TimelineEntry } from "@/lib/types";
+import type { Chapter, Summary, TimelineEntry } from "@/lib/types";
 export function NotesPanel({
   id,
   seek,
@@ -15,9 +18,7 @@ export function NotesPanel({
   timeline: TimelineEntry[];
 }) {
   const summary = useApi<Summary>(`meetings/${id}/summary`);
-  const tasks = useApi<Page<Task>>(`meetings/${id}/action-items`);
   const chapters = useApi<Chapter[]>(`meetings/${id}/chapters`);
-  const action = useAction();
   function source(segment: string | null) {
     const target = timeline.find((s) => s.public_id === segment);
     if (target) seek(target.start_ms);
@@ -49,6 +50,7 @@ export function NotesPanel({
                 </p>
               )}
               <p>{summary.data.overview}</p>
+              <Regenerate id={id} summary={summary.data} />
               <p className="provenance">
                 {summary.data.provider} · transcript revision{" "}
                 {summary.data.source_revision}
@@ -78,41 +80,7 @@ export function NotesPanel({
             ))}
           </>
         )}
-        <section className="note-section">
-          <h3>
-            <CheckSquare size={16} /> Action items{" "}
-            <span className="count">
-              {tasks.data?.items.filter((t) => t.status === "completed")
-                .length ?? 0}
-              /{tasks.data?.items.length ?? 0}
-            </span>
-          </h3>
-          <ErrorNotice error={action.error} />
-          {tasks.data?.items.map((task) => (
-            <label className="notebook-task" key={task.id}>
-              <input
-                type="checkbox"
-                checked={task.status === "completed"}
-                disabled={action.isPending}
-                onChange={() =>
-                  action.mutate({
-                    path: `meetings/${id}/action-items/${task.id}`,
-                    method: "PATCH",
-                    version: task.version,
-                    body: {
-                      status:
-                        task.status === "completed" ? "open" : "completed",
-                    },
-                    message: "Task updated",
-                  })
-                }
-              />
-              <span className={task.status === "completed" ? "completed" : ""}>
-                {task.text}
-              </span>
-            </label>
-          ))}
-        </section>
+        <MeetingTasks id={id} seek={source} />
         <section className="note-section">
           <h3>
             <ListTree size={16} /> Outline
@@ -132,11 +100,7 @@ export function NotesPanel({
           ))}
         </section>
         {summary.data && (
-          <NotesEditor
-            key={summary.data.version}
-            id={id}
-            summary={summary.data}
-          />
+          <NotesEditor key={id} id={id} summary={summary.data} />
         )}
       </div>
     </section>
@@ -144,19 +108,26 @@ export function NotesPanel({
 }
 function NotesEditor({ id, summary }: { id: string; summary: Summary }) {
   const [notes, setNotes] = useState(summary.notes);
+  const [baseline, setBaseline] = useState(summary);
+  const [reloadError, setReloadError] = useState<Error | null>(null);
   const action = useAction();
   return (
     <form
       className="note-section"
       onSubmit={(e) => {
         e.preventDefault();
-        action.mutate({
-          path: `meetings/${id}/summary`,
-          method: "PATCH",
-          version: summary.version,
-          body: { notes },
-          message: "Notes saved",
-        });
+        action
+          .mutateAsync({
+            path: `meetings/${id}/summary`,
+            method: "PATCH",
+            version: baseline.version,
+            body: { notes },
+            message: "Notes saved",
+          })
+          .then(
+            ({ result }) => setBaseline(result as Summary),
+            () => {},
+          );
       }}
     >
       <h3>
@@ -173,8 +144,24 @@ function NotesEditor({ id, summary }: { id: string; summary: Summary }) {
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
       />
-      <ErrorNotice error={action.error} />
-      <button disabled={action.isPending || notes === summary.notes}>
+      <ErrorNotice error={reloadError ?? action.error} />
+      {action.error && (
+        <button
+          type="button"
+          onClick={() =>
+            api<Summary>(`meetings/${id}/summary`).then(
+              (latest) => {
+                setBaseline(latest);
+                setReloadError(null);
+              },
+              (error) => setReloadError(error as Error),
+            )
+          }
+        >
+          Use latest version, keep draft
+        </button>
+      )}
+      <button disabled={action.isPending || notes === baseline.notes}>
         {action.isPending ? "Saving…" : "Save notes"}
       </button>
     </form>

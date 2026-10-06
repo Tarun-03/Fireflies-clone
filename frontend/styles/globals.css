@@ -1510,3 +1510,27 @@ input.player-range {
     padding: 16px;
   }
 }
+.notes-panel .task-row {
+  padding: 9px 0;
+  gap: 8px;
+  align-items: flex-start;
+}
+.notes-panel .task-row > span {
+  font-size: 12px;
+}
+.notes-panel .task-row small {
+  font-size: 10px;
+}
+.task-entry {
+  border-bottom: 1px solid var(--border);
+}
+.task-entry .task-row {
+  border: 0;
+}
+.notice {
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: 12px;
+}

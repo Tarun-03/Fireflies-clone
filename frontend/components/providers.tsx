@@ -81,6 +81,7 @@ export function useAction() {
       body?: unknown;
       version?: number;
       key?: string;
+      signal?: AbortSignal;
       message?: string;
     }) => {
       const result = await api<unknown>(input.path, input);

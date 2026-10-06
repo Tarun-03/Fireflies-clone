@@ -2,7 +2,7 @@ from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Query
-from sqlalchemy import delete, insert, select, update
+from sqlalchemy import delete, func, insert, select, update
 
 from app.api.dependencies import Scoped, Version, require_version
 from app.core.errors import DomainError
@@ -71,6 +71,16 @@ def meeting_tasks(meeting_id: UUID, scope: Scoped) -> Page[Task]:
 def add_task(meeting_id: UUID, data: TaskInput, scope: Scoped) -> Task:
     get_resource(scope, meetings, str(meeting_id))
     validate_assignee(scope, str(meeting_id), data.assignee_participant_id)
+    count = (
+        scope.db.scalar(
+            select(func.count())
+            .select_from(action_items)
+            .where(action_items.c.meeting_id == str(meeting_id))
+        )
+        or 0
+    )
+    if count >= 100:
+        raise DomainError(429, "task_quota", "This meeting has reached its 100-task limit.")
     task_id = uid()
     scope.db.execute(
         insert(action_items).values(

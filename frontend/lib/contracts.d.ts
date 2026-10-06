@@ -194,6 +194,23 @@ export interface paths {
         patch: operations["mark_activity_api_v1_activity__event_id__patch"];
         trace?: never;
     };
+    "/api/v1/intelligence": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Intelligence Status */
+        get: operations["intelligence_status_api_v1_intelligence_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/meetings/import/preview": {
         parameters: {
             query?: never;
@@ -489,6 +506,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/meetings/{meeting_id}/summary/regenerate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Regenerate */
+        post: operations["regenerate_api_v1_meetings__meeting_id__summary_regenerate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/meetings/{meeting_id}/segments/{segment_id}/impact": {
         parameters: {
             query?: never;
@@ -633,6 +667,17 @@ export interface components {
              * @default false
              */
             acknowledge_estimated: boolean;
+        };
+        /** IntelligenceStatus */
+        IntelligenceStatus: {
+            /** Available */
+            available: boolean;
+            /** Provider */
+            provider: string;
+            /** Model */
+            model: string | null;
+            /** Context Characters */
+            context_characters: number;
         };
         /** Meeting */
         Meeting: {
@@ -891,6 +936,20 @@ export interface components {
             /** Ai Available */
             ai_available: boolean;
         };
+        /** RegenerateRequest */
+        RegenerateRequest: {
+            /**
+             * Mode
+             * @default extractive
+             * @enum {string}
+             */
+            mode: "extractive" | "openai";
+            /**
+             * Consent
+             * @default false
+             */
+            consent: boolean;
+        };
         /** Segment */
         Segment: {
             /**
@@ -1008,6 +1067,8 @@ export interface components {
             stale: boolean;
             /** Points */
             points: components["schemas"]["SummaryPoint"][];
+            /** Notice */
+            notice?: string | null;
         };
         /** SummaryPoint */
         SummaryPoint: {
@@ -1638,6 +1699,38 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Activity"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    intelligence_status_api_v1_intelligence_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IntelligenceStatus"];
                 };
             };
             /** @description Validation Error */
@@ -2486,6 +2579,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Chapter"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    regenerate_api_v1_meetings__meeting_id__summary_regenerate_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "idempotency-key": string;
+                "If-Match"?: string | null;
+                "x-demo-session"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegenerateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Summary"];
                 };
             };
             /** @description Validation Error */

@@ -22,6 +22,7 @@ from app.models import (
 from app.models.common import uid
 from app.repositories.scoped import get_resource
 from app.schemas.common import Page
+from app.schemas.intelligence import IntelligenceStatus
 from app.schemas.workspace import (
     Activity,
     ActivityUpdate,
@@ -198,3 +199,14 @@ def mark_activity(
         .values(is_read=data.is_read, version=row["version"] + 1)
     )
     return Activity.model_validate(get_resource(scope, activity_events, str(event_id)))
+
+
+@router.get("/intelligence", response_model=IntelligenceStatus)
+def intelligence_status(scope: Scoped) -> IntelligenceStatus:
+    settings = get_settings()
+    return IntelligenceStatus(
+        available=settings.llm_provider == "openai",
+        provider=settings.llm_provider,
+        model=settings.llm_model or None,
+        context_characters=24000,
+    )

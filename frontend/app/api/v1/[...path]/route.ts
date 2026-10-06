@@ -44,6 +44,7 @@ async function handle(
       session.id,
       {
         method: request.method,
+        signal: request.signal,
         headers,
         body: body?.length ? Buffer.from(body) : undefined,
       },
