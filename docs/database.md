@@ -1,6 +1,6 @@
 # Database
 
-SQLite runs on one disk-backed backend instance. Each connection enables foreign keys, WAL, `busy_timeout=5000`, and `synchronous=FULL`. Writes reserve the SQLite writer before checking quotas. Database schemas are managed with Alembic, never with runtime table creation.
+Local development uses disk-backed SQLite with foreign keys, WAL, `busy_timeout=5000`, and `synchronous=FULL`. Deployment uses remote Turso libSQL with foreign keys and no local journaling/disk settings. Writes reserve the SQLite writer before checking quotas. Database schemas are managed with Alembic, never with runtime table creation.
 
 Public resources use UUIDs. Transcript/search rows also have integer indexing keys. Composite foreign keys include workspace and, where necessary, meeting IDs. An attendee cannot own a task in another meeting; a segment cannot reference another meeting's speaker. Triggers enforce duration boundaries, exact Unicode highlight ranges, and deletion cleanup.
 
@@ -34,7 +34,7 @@ Search uses an external-content FTS5 index with unicode61 tokenization. Database
 
 ## Operations
 
-Run from `backend/` after configuring `.env`:
+For local SQLite, run from `backend/` after configuring `.env` (both TURSO variables blank):
 
 ```sh
 uv run alembic upgrade head
@@ -46,7 +46,7 @@ uv run python -m scripts.storage rebuild-search
 
 Backup uses SQLite's online backup API and checks integrity and foreign keys. Restore requires a new destination; stop the server before switching its configured database. Never copy only the live database file while WAL writes may be pending. Tests demonstrate a restored database retains eight meetings and forty tasks.
 
-This architecture has one writer at a time. A multi-instance service would require moving the persistence/search adapter to a server database such as PostgreSQL; a shared SQLite file is not a substitute.
+Local SQLite and remote Turso libSQL retain the existing relational schema and FTS5 triggers. Keep one backend instance/worker so process-local rate limits remain effective. Remote mode stores data in Turso, not a shared Render file; it applies no local WAL, free-disk or physical-page settings. See [remote backup and deployment procedures](deployment.md).
 
 ## Retention and cleanup
 

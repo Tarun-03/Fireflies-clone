@@ -8,16 +8,13 @@ services:
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     healthCheckPath: /health/ready
-    # maxShutdownDelaySeconds: 40
-    disk:
-      name: meeting-workspace-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       - key: ENVIRONMENT
         value: production
-      - key: DATABASE_URL
-        value: sqlite:////var/data/meeting-workspace.db
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false
       - key: INTERNAL_API_TOKEN
         sync: false
       - key: ALLOWED_HOSTS
@@ -28,5 +25,3 @@ services:
         value: '500'
       - key: GLOBAL_TEXT_BYTES
         value: '536870912'
-      - key: DISK_RESERVE_BYTES
-        value: '104857600'

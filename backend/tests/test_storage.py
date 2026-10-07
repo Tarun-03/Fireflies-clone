@@ -31,16 +31,30 @@ from scripts.storage import backup
 
 
 @pytest.fixture
-def database(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Session]:
+def database(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest
+) -> Iterator[Session]:
     database_path = tmp_path / "workspace.db"
     monkeypatch.setenv("DATABASE_URL", f"sqlite:///{database_path}")
     get_settings.cache_clear()
-    command.upgrade(Config("alembic.ini"), "head")
-    engine = make_engine(f"sqlite:///{database_path}")
+    if request.config.getoption("--libsql"):
+        from app.db.libsql import make_libsql_engine
+
+        engine = make_libsql_engine(str(database_path))
+    else:
+        engine = make_engine(f"sqlite:///{database_path}")
+    config = Config("alembic.ini")
+    with engine.connect() as connection:
+        config.attributes["connection"] = connection
+        command.upgrade(config, "head")
     with Session(engine) as db:
         yield db
     engine.dispose()
     get_settings.cache_clear()
+
+
+def request_libsql(db: Session) -> bool:
+    return db.get_bind().url.drivername == "sqlite+workspace_libsql"
 
 
 def seed(db: Session) -> tuple[str, str]:
@@ -59,7 +73,8 @@ def test_atomic_idempotent_seed_and_foreign_keys(database: Session) -> None:
     assert database.scalar(select(func.count()).select_from(search_documents)) == 328
     assert database.execute(text("PRAGMA foreign_key_check")).all() == []
     assert database.scalar(text("PRAGMA foreign_keys")) == 1
-    assert database.scalar(text("PRAGMA journal_mode")) == "wal"
+    if not request_libsql(database):
+        assert database.scalar(text("PRAGMA journal_mode")) == "wal"
     meeting_id = database.scalar(select(meetings.c.id))
     database.execute(delete(meetings).where(meetings.c.id == meeting_id))
     database.commit()

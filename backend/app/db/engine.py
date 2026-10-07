@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.engine import Engine
 from sqlalchemy.pool import ConnectionPoolEntry
 
-from app.core.config import get_settings
+from app.core.config import Settings, get_settings
 
 
 def make_engine(url: str) -> Engine:
@@ -20,4 +20,15 @@ def make_engine(url: str) -> Engine:
     return engine
 
 
-engine = make_engine(get_settings().database_url)
+def configured_engine(settings: Settings | None = None) -> Engine:
+    settings = settings or get_settings()
+    if settings.remote_database:
+        from app.db.libsql import make_libsql_engine
+
+        # Remote-only HTTPS connection. No embedded replica or local database file.
+        endpoint = "https://" + settings.turso_database_url.removeprefix("libsql://").rstrip("/")
+        return make_libsql_engine(endpoint, settings.turso_auth_token.get_secret_value())
+    return make_engine(settings.database_url)
+
+
+engine = configured_engine()

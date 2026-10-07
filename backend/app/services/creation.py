@@ -1,5 +1,6 @@
 import hashlib
 from datetime import UTC, datetime, timedelta
+from typing import Any
 
 from sqlalchemy import func, insert, select
 
@@ -7,6 +8,7 @@ from app.api.dependencies import Scope
 from app.core.config import get_settings
 from app.core.errors import DomainError
 from app.core.limits import check_storage, rate_limit
+from app.db.bulk import insert_rows
 from app.models import (
     action_items,
     attendees,
@@ -122,6 +124,7 @@ def create_meeting(
         )
     speaker_ids: dict[str, str] = {}
     source_ids: list[str] = []
+    segment_rows: list[dict[str, Any]] = []
     for ordinal, segment in enumerate(data.segments):
         if segment.speaker not in speaker_ids:
             speaker_ids[segment.speaker] = uid()
@@ -138,8 +141,8 @@ def create_meeting(
             )
         source_id = uid()
         source_ids.append(source_id)
-        scope.db.execute(
-            insert(segments).values(
+        segment_rows.append(
+            dict(
                 **context,
                 public_id=source_id,
                 ordinal=ordinal,
@@ -149,6 +152,7 @@ def create_meeting(
                 text=segment.text,
             )
         )
+    insert_rows(scope.db, segments, segment_rows)
     summary_id = uid()
     scope.db.execute(
         insert(summaries).values(

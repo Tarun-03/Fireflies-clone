@@ -1,4 +1,4 @@
-"""Prepare the mounted database and validate fixtures before accepting requests."""
+"""Prepare the configured database and validate fixtures before accepting requests."""
 
 import os
 from pathlib import Path
@@ -14,11 +14,10 @@ from app.services.seed import SeedTemplate
 def prepare() -> None:
     root = Path(__file__).resolve().parents[1]
     settings = get_settings()
-    database = Path(settings.database_url.removeprefix("sqlite:///")).resolve()
-    if not database.parent.is_dir():
-        raise RuntimeError("The database directory is missing. Mount the persistent volume first.")
-    if settings.environment == "production" and database.parent != Path("/var/data"):
-        raise RuntimeError("Production SQLite must use the mounted /var/data directory.")
+    if not settings.remote_database:
+        database = Path(settings.database_url.removeprefix("sqlite:///")).resolve()
+        if not database.parent.is_dir():
+            raise RuntimeError("The local database directory is missing.")
     config = Config(str(root / "alembic.ini"))
     config.set_main_option("script_location", str(root / "alembic"))
     command.upgrade(config, "head")

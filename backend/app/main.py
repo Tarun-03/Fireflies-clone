@@ -75,12 +75,15 @@ def ready() -> JSONResponse:
             versions = set(connection.scalars(text("SELECT version_num FROM alembic_version")))
             if versions != migration_heads():
                 return JSONResponse({"status": "unavailable"}, status_code=503)
-            connection.execute(text("SELECT rowid FROM search_documents_fts LIMIT 0"))
-            available = connection.execute(
-                text("SELECT sqlite_compileoption_used('ENABLE_FTS5')")
-            ).scalar()
-            if not available:
+            if connection.scalar(text("PRAGMA foreign_keys")) != 1:
                 return JSONResponse({"status": "unavailable"}, status_code=503)
+            # Exercise the virtual table and MATCH implementation, not a build flag.
+            connection.execute(
+                text(
+                    "SELECT rowid FROM search_documents_fts "
+                    "WHERE search_documents_fts MATCH 'readinessprobe' LIMIT 1"
+                )
+            ).all()
     except SQLAlchemyError:
         return JSONResponse({"status": "unavailable"}, status_code=503)
     return JSONResponse({"status": "ok"})

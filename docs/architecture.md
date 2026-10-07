@@ -15,7 +15,7 @@ Public response models omit internal workspace and secret fields. OpenAPI is gen
 
 SQLite migrations define normalized records, composite scope keys, and FTS projection triggers. Import creation, seed cloning, and task reassignment are atomic. The anonymous session has a thirty-day lifetime; cookie loss creates a new isolated workspace without deleting the old one.
 
-The deployment boundary is one backend instance with a persistent disk. Backups use SQLite's consistent online backup API. This design does not support unrestricted horizontal write scaling.
+The free deployment uses one backend instance and remote Turso libSQL. Local SQLite backups use its consistent online backup API; remote backup/restore is documented separately. The single-process rate limiter still requires one backend instance.
 
 The meeting notebook requests transcript pages of at most 60 turns and a separate compact timeline of at most 3,000 entries. The player uses binary search by `(start_ms, ordinal)` to locate the current turn; follow mode selects a nearby page instead of mounting the complete text. Wheel, touch, and transcript navigation keys suspend follow. Mobile views hide panels without unmounting the player or search state. Simulated playback uses a monotonic clock; bundled sample audio uses the media element's `currentTime`. Neither mode claims to be a meeting recording.
 
@@ -50,3 +50,7 @@ The provider runs outside the SQLite writer transaction. A 30-second provider de
 Library pages stop below a 750 KiB item budget; transcript and annotation pages use 512 KiB budgets. Every BFF JSON response is checked below 1 MiB, and downloadable files below 4 MiB. These limits count UTF-8 bytes, not string length. Exports split all content into explicit numbered parts before PDF/text generation. Participant options use pages of at most 100 and a workspace cap of 500. There are at most 100 tags and 500 combined annotations per meeting. The physical SQLite page budget accounts for indexes and ancillary content in addition to logical transcript quotas.
 
 The player first finds the latest start with binary search, then checks earlier overlapping turns if that candidate has ended. This bounded overlap check preserves the currently speaking turn; a real gap uses the latest prior turn as labelled context. Scroll containers establish positioning boundaries for hidden labels so accessibility elements cannot inflate the page height.
+
+## Remote libSQL mode
+
+Production uses a remote-only HTTPS connection to Turso's libSQL engine through the pinned libsql client and a tested SQLAlchemy DBAPI bridge. Development retains Python SQLite. The same Alembic migrations run inside an explicit transaction; no schema rewrite or search replacement is needed. Local WAL and disk checks are not sent to Turso. NullPool discards connections after each request; no replica file, volume, or root ownership step is part of remote startup. Seed and transcript inserts use bounded multi-row statements to reduce network round trips. Actual remote latency, account limits and redeploy persistence still require the hosted acceptance procedure.

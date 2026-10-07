@@ -2,13 +2,13 @@
 import os
 from pathlib import Path
 
-values = [os.environ.get(key, '') for key in ('INTERNAL_API_TOKEN', 'SESSION_SIGNING_SECRET', 'OPENAI_API_KEY')]
+values = [os.environ.get(key, '') for key in ('INTERNAL_API_TOKEN', 'SESSION_SIGNING_SECRET', 'OPENAI_API_KEY', 'TURSO_AUTH_TOKEN')]
 for name in ('backend/.env', 'frontend/.env.local'):
     path = Path(name)
     if path.exists():
         for line in path.read_text().splitlines():
             key, _, value = line.partition('=')
-            if key in ('INTERNAL_API_TOKEN', 'SESSION_SIGNING_SECRET', 'OPENAI_API_KEY'):
+            if key in ('INTERNAL_API_TOKEN', 'SESSION_SIGNING_SECRET', 'OPENAI_API_KEY', 'TURSO_AUTH_TOKEN'):
                 values.append(value.strip().strip('\"\''))
 files = list(Path('frontend/.next/static').rglob('*.js'))
 if not files:

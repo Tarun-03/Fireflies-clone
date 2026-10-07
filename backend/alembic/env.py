@@ -1,8 +1,7 @@
 from typing import Any
 
 from alembic import context
-from app.core.config import get_settings
-from app.db.engine import make_engine
+from app.db.engine import configured_engine
 from app.models import metadata
 
 
@@ -21,18 +20,34 @@ def include_object(obj: Any, name: str | None, kind: str, reflected: bool, compa
     )
 
 
-if context.is_offline_mode():
-    context.configure(url=get_settings().database_url, target_metadata=metadata, literal_binds=True)
-    with context.begin_transaction():
-        context.run_migrations()
-else:
-    engine = make_engine(get_settings().database_url)
-    with engine.connect() as connection:
-        context.configure(
-            connection=connection,
-            target_metadata=metadata,
-            render_as_batch=True,
-            include_object=include_object,
-        )
+def run(connection: Any) -> None:
+    connection.exec_driver_sql("BEGIN IMMEDIATE")
+    context.configure(
+        transactional_ddl=True,
+        connection=connection,
+        target_metadata=metadata,
+        render_as_batch=True,
+        include_object=include_object,
+    )
+    try:
         with context.begin_transaction():
             context.run_migrations()
+        connection.commit()
+    except BaseException:
+        connection.rollback()
+        raise
+
+
+if context.is_offline_mode():
+    context.configure(url="sqlite:///", target_metadata=metadata, literal_binds=True)
+    with context.begin_transaction():
+        context.run_migrations()
+elif context.config.attributes.get("connection") is not None:
+    run(context.config.attributes["connection"])
+else:
+    engine = configured_engine()
+    try:
+        with engine.connect() as connection:
+            run(connection)
+    finally:
+        engine.dispose()

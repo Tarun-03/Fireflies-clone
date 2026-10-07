@@ -50,7 +50,13 @@ def main() -> None:
     args = parser.parse_args()
     if args.retention_days < 0:
         parser.error("--retention-days cannot be negative")
-    database = Path(get_settings().database_url.removeprefix("sqlite:///"))
+    settings = get_settings()
+    if settings.remote_database and args.command in {"backup", "restore"}:
+        parser.error(
+            "Remote mode: use the Turso snapshot/sync and restore procedure in "
+            "docs/deployment.md; local file operations are refused"
+        )
+    database = Path(settings.database_url.removeprefix("sqlite:///"))
     if args.command == "backup":
         if args.destination is None:
             parser.error("--destination is required")

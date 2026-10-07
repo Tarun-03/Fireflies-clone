@@ -10,7 +10,10 @@ COPY alembic.ini ./
 COPY fixtures ./fixtures
 COPY assets ./assets
 COPY scripts ./scripts
-RUN useradd --uid 10001 --create-home workspace && mkdir -p /var/data && chown workspace:workspace /var/data
+RUN useradd --uid 10001 --create-home workspace
+USER workspace
+# Local Compose only; remote deployment never opens this directory.
+RUN mkdir /home/workspace/data
 ENV PATH="/app/.venv/bin:$PATH" PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1
 EXPOSE 8000
-CMD ["python", "-m", "scripts.container_start"]
+CMD ["python", "-m", "scripts.start"]

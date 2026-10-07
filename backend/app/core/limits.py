@@ -31,6 +31,8 @@ def rate_limit(key: str, category: str, limit: int, seconds: int = 60) -> None:
 
 def ensure_free_space(added_bytes: int = 3 * 1024 * 1024) -> None:
     config = get_settings()
+    if config.remote_database:
+        return
     database = Path(config.database_url.removeprefix("sqlite:///"))
     if (
         shutil.disk_usage(database.resolve().parent).free
@@ -40,6 +42,8 @@ def ensure_free_space(added_bytes: int = 3 * 1024 * 1024) -> None:
 
 
 def check_database_budget(db: Session) -> None:
+    if get_settings().remote_database:
+        return  # Physical database allocation belongs to Turso; logical quotas remain below.
     pages = int(db.scalar(text("PRAGMA page_count")) or 0)
     free = int(db.scalar(text("PRAGMA freelist_count")) or 0)
     size = int(db.scalar(text("PRAGMA page_size")) or 4096)
@@ -57,12 +61,7 @@ def check_storage(
 ) -> None:
     check_database_budget(db)
     config = get_settings()
-    database = Path(config.database_url.removeprefix("sqlite:///"))
-    if (
-        shutil.disk_usage(database.resolve().parent).free
-        < config.disk_reserve_bytes + added_bytes * 4
-    ):
-        raise DomainError(503, "storage_unavailable", "Storage is temporarily unavailable.")
+    ensure_free_space(added_bytes)
     global_bytes = db.scalar(select(func.coalesce(func.sum(func.length(segments.c.text)), 0))) or 0
     # Four bytes per Unicode code point conservatively bounds UTF-8 text storage.
     if global_bytes * 4 + added_bytes > config.global_text_bytes:

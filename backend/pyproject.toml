@@ -6,6 +6,7 @@ dependencies = [
     "alembic==1.20.0",
     "fastapi==0.142.2",
     "httpx==0.28.1",
+    "libsql==0.1.11",
     "openai==3.24.0",
     "pydantic-settings==2.15.0",
     "reportlab==5.0.1",

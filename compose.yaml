@@ -1,14 +1,18 @@
 services:
   backend:
+    # libsql publishes Linux wheels for x86_64; select x86_64 on Apple Silicon too.
+    platform: linux/amd64
     build: ./backend
     env_file: ./backend/.env
     environment:
       ENVIRONMENT: development
-      DATABASE_URL: sqlite:////var/data/meeting-workspace.db
+      TURSO_DATABASE_URL: ""
+      TURSO_AUTH_TOKEN: ""
+      DATABASE_URL: sqlite:////home/workspace/data/meeting-workspace.db
       ALLOWED_HOSTS: localhost,127.0.0.1,backend
       LLM_PROVIDER: disabled
     volumes:
-      - meeting-data:/var/data
+      - meeting-data:/home/workspace/data
     ports:
       - '127.0.0.1:8000:8000'
     healthcheck:

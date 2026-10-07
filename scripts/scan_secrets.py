@@ -8,7 +8,7 @@ PATTERNS = {
     "openai-key": re.compile(rb"sk-(?:proj-|svcacct-)?[A-Za-z0-9_-]{40,}"),
     "github-key": re.compile(rb"(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{50,})"),
     "aws-key": re.compile(rb"(?:AKIA|ASIA)[A-Z0-9]{16}"),
-    "assigned-secret": re.compile(rb"(?im)^(?:INTERNAL_API_TOKEN|SESSION_SIGNING_SECRET|OPENAI_API_KEY)=[A-Za-z0-9_/-]{24,}$"),
+    "assigned-secret": re.compile(rb"(?im)^(?:INTERNAL_API_TOKEN|SESSION_SIGNING_SECRET|OPENAI_API_KEY|TURSO_AUTH_TOKEN)=[A-Za-z0-9_./-]{24,}$"),
 }
 
 def git(*args: str) -> bytes:

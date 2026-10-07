@@ -70,17 +70,47 @@ def main() -> None:
             {"notes": "Persistent synthetic notes café 😀"},
             {"If-Match": "1"},
         )
+        segment = request(base + "/transcript")["items"][0]
+        annotation = {"segment_id": segment["public_id"], "segment_version": segment["version"]}
+        request(base + "/comments", "POST", annotation | {"body": "Persistent comment"})
+        request(
+            base + "/highlights",
+            "POST",
+            annotation
+            | {
+                "start_offset": 0,
+                "end_offset": 2,
+                "selected_text": "We",
+                "note": "Persistence highlight",
+            },
+        )
+        request(
+            base + "/soundbites",
+            "POST",
+            {"title": "Persistent soundbite", "start_ms": 0, "end_ms": 10000},
+        )
     base = "meetings/" + state["meeting"]
     actual = {
         suffix: request(base + suffix)
-        for suffix in ["", "/transcript", "/action-items", "/summary"]
+        for suffix in [
+            "",
+            "/transcript",
+            "/action-items",
+            "/summary",
+            "/comments",
+            "/highlights",
+            "/soundbites",
+        ]
     }
+    actual["search"] = request("search?q=durable")
+    if not any(hit["meeting_id"] == state["meeting"] for hit in actual["search"]["items"]):
+        raise SystemExit("Persistence verification failed: search lost the meeting.")
     if args.phase == "before":
         state["expected"] = actual
         with args.state.open("x") as output:
             args.state.chmod(0o600)
             json.dump(state, output)
-        print("Saved a synthetic meeting, task, transcript, and notes for restart comparison.")
+        print("Saved meeting, task, notes, annotations, and search results for restart comparison.")
     else:
         if actual != state["expected"]:
             raise SystemExit("Persistence verification failed: saved records changed.")
